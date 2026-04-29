@@ -1,0 +1,127 @@
+FinOps Tool — Session Summary
+Date: 2026-03-10
+Model: Claude Sonnet 4.6
+
+================================================================================
+OBJECTIVE
+================================================================================
+Build a simple, portable FinOps tool in Python that:
+  - Logs into a cloud account (Azure first, modular for future providers)
+  - Extracts cloud resource usage across multiple subscriptions
+  - Maps usage to current retail prices via public APIs
+  - Exports results to CSV
+  - Generates an Excel dashboard for visualisation
+  - Can also work with a pre-existing CSV file as input
+
+================================================================================
+DECISIONS & DESIGN CHOICES
+================================================================================
+  - Language:       Python 3.9+
+  - Auth:           Azure CLI (az login) via DefaultAzureCredential
+  - Pricing:        Azure Retail Prices REST API (free, no auth required)
+  - Modularity:     Abstract BaseProvider class — AWS/GCP placeholders ready
+  - Missing data:   Text fields use "NDF" (No Data Found); numeric fields use 0
+  - Terminal output: Colour-coded via colorama (cyan=headers, green=success,
+                     yellow=warnings, red=errors, magenta=cost totals)
+  - Storage pricing: 100 GB placeholder quantity (actual GB unknown without
+                     consumption API)
+
+================================================================================
+PROJECT STRUCTURE
+================================================================================
+  finops-tool/
+  ├── main.py                        CLI entry point
+  ├── requirements.txt               Python dependencies
+  ├── README.md                      Setup guide and usage reference
+  ├── config/
+  │   └── resources.yaml             Editable list of Azure resource types
+  ├── data/
+  │   └── sample_data.csv            25-row realistic test dataset
+  ├── core/
+  │   ├── console.py                 Colour print utilities (colorama)
+  │   ├── extractor.py               Orchestrates live extraction
+  │   ├── pricer.py                  Enriches resources with pricing data
+  │   ├── exporter.py                CSV import / export with NDF handling
+  │   └── dashboard.py               Excel dashboard generator (openpyxl)
+  └── providers/
+      ├── base.py                    Abstract BaseProvider interface
+      ├── azure/
+      │   ├── auth.py                DefaultAzureCredential setup
+      │   ├── resources.py           Resource listing (top-level + nested types)
+      │   ├── pricing.py             Azure Retail Prices API + per-type handlers
+      │   └── provider.py            AzureProvider (implements BaseProvider)
+      └── aws/
+          └── __init__.py            Placeholder for future AWS support
+
+================================================================================
+SUPPORTED RESOURCE TYPES (initial list in resources.yaml)
+================================================================================
+  - Microsoft.Compute/virtualMachines
+  - Microsoft.Storage/storageAccounts
+  - Microsoft.Sql/servers/databases      (nested type — handled separately)
+  - Microsoft.Web/serverFarms
+  - Microsoft.Network/virtualNetworks    (no direct cost — returns $0)
+
+================================================================================
+CSV OUTPUT COLUMNS
+================================================================================
+  subscription_id | subscription_name | resource_group | resource_name |
+  resource_type | location | sku | size | unit | quantity |
+  unit_price_usd | estimated_cost_usd
+
+================================================================================
+CLI FLAGS
+================================================================================
+  --provider azure              Cloud provider (required)
+  --output FILE                 Output CSV path (required)
+  --input FILE                  Load existing CSV instead of live extraction
+  --subscription ID [ID ...]    Target specific subscription(s)
+  --config FILE                 Custom resources.yaml path
+  --no-pricing                  Skip pricing API — inventory only
+  --dashboard FILE              Also generate an Excel dashboard (.xlsx)
+
+================================================================================
+EXCEL DASHBOARD SHEETS
+================================================================================
+  1. Summary      — KPI cards, cost by resource type (table + bar chart),
+                    cost by subscription (table + pie chart)
+  2. By Location  — Regional breakdown table + horizontal bar chart
+  3. Raw Data     — Full filterable Excel Table, frozen header,
+                    NDF cells highlighted yellow, zero-cost rows in grey
+
+================================================================================
+SAMPLE DATA
+================================================================================
+  File: data/sample_data.csv
+  Rows: 25 resources across 2 subscriptions
+
+  Subscription    Resources   Est. Monthly Cost
+  Development     8           $222.36
+  Production      17          $1,612.33
+  TOTAL           25          $1,834.69
+
+  By resource type:
+  Microsoft.Compute/virtualMachines    $1,133.11
+  Microsoft.Sql/servers/databases        $474.50
+  Microsoft.Web/serverFarms              $194.18
+  Microsoft.Storage/storageAccounts       $32.90
+  Microsoft.Network/virtualNetworks        $0.00
+
+================================================================================
+TEST COMMAND (once venv is active)
+================================================================================
+  python main.py --provider azure \
+                 --input data/sample_data.csv \
+                 --output data/sample_costs.csv \
+                 --dashboard data/sample_dashboard.xlsx
+
+================================================================================
+NEXT STEPS (not yet implemented)
+================================================================================
+  - Test against a live Azure account and validate pricing accuracy
+  - Review and adjust the Excel dashboard layout based on feedback
+  - Add additional resource types to resources.yaml as needed
+  - Add AWS provider support (providers/aws/)
+  - Consider adding month-over-month comparison to the dashboard
+  - Consider adding a "by resource group" breakdown sheet
+================================================================================

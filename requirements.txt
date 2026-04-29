@@ -1,0 +1,23 @@
+# Azure SDK - Authentication (supports az login, Service Principal, Managed Identity)
+azure-identity
+
+# Azure SDK - Resource management (list resources across subscriptions)
+azure-mgmt-resource
+
+# Azure SDK - Subscription management (discover all accessible subscriptions)
+azure-mgmt-subscription
+
+# HTTP client - used to call the Azure Retail Prices REST API
+requests
+
+# YAML parser - used to read the resource type config file
+pyyaml
+
+# Data manipulation and CSV handling
+pandas
+
+# Excel export support (used later for dashboard)
+openpyxl
+
+# Terminal colors (cross-platform: works on Windows, macOS, Linux)
+colorama

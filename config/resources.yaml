@@ -1,0 +1,38 @@
+# ============================================================
+# Resource Type Configuration
+# ============================================================
+# This file controls which Azure resource types the tool will
+# extract and price. Add or comment out types as needed.
+#
+# Format: Microsoft.<Namespace>/<ResourceType>
+#
+# Resources are processed in order. Commented-out lines are
+# ignored — use them to stage future resource types.
+# ============================================================
+
+resources:
+  # --- Compute ---
+  - Microsoft.Compute/virtualMachines         # VMs (most impactful cost driver)
+  # - Microsoft.Compute/virtualMachineScaleSets  # VMSS (add later)
+
+  # --- Storage ---
+  - Microsoft.Storage/storageAccounts          # Blob, File, Table, Queue storage
+
+  # --- Databases ---
+  - Microsoft.Sql/servers/databases            # Azure SQL Database
+
+  # --- App Hosting ---
+  - Microsoft.Web/serverFarms                  # App Service Plans (hosts web apps)
+
+  # --- Networking ---
+  - Microsoft.Network/virtualNetworks          # VNets (base networking cost)
+  # - Microsoft.Network/publicIPAddresses      # Public IPs (add later)
+  # - Microsoft.Network/applicationGateways    # App Gateways (add later)
+
+  # --- Containers (future) ---
+  # - Microsoft.ContainerService/managedClusters  # AKS clusters
+  # - Microsoft.ContainerRegistry/registries      # Container Registry
+
+  # --- AI / ML (future) ---
+  # - Microsoft.CognitiveServices/accounts
+  # - Microsoft.MachineLearningServices/workspaces

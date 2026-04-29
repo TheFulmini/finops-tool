@@ -1,0 +1,26 @@
+subscription_id,subscription_name,resource_group,resource_name,resource_type,location,sku,size,unit,quantity,unit_price_usd,estimated_cost_usd
+sub-dev-00a1-xxxx,Development,rg-dev-compute,vm-dev-web-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-dev-00a1-xxxx,Development,rg-dev-compute,vm-dev-web-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-dev-00a1-xxxx,Development,rg-dev-compute,vm-dev-bastion,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-dev-00a1-xxxx,Development,rg-dev-storage,stdevlogs001,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,100,0.018,1.80
+sub-dev-00a1-xxxx,Development,rg-dev-storage,stdevartifacts,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,100,0.036,3.60
+sub-dev-00a1-xxxx,Development,rg-dev-sql,myserver-dev/app-db,Microsoft.Sql/servers/databases,eastus,Standard,NDF,1 Hour,730,0.10,73.00
+sub-dev-00a1-xxxx,Development,rg-dev-web,asp-dev-api,Microsoft.Web/serverFarms,eastus,NDF,B1,1 Hour,730,0.018,13.14
+sub-dev-00a1-xxxx,Development,rg-dev-network,vnet-dev-main,Microsoft.Network/virtualNetworks,eastus,NDF,NDF,N/A (costs from peering/data transfer),0,0.00,0.00
+sub-prod-00b2-xxxx,Production,rg-prod-compute-we,vm-prod-web-01,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-prod-00b2-xxxx,Production,rg-prod-compute-we,vm-prod-web-02,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-prod-00b2-xxxx,Production,rg-prod-compute-we,vm-prod-web-03,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-prod-00b2-xxxx,Production,rg-prod-compute-we,vm-prod-api-01,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D2s_v3,1 Hour,730,0.106,77.38
+sub-prod-00b2-xxxx,Production,rg-prod-compute-we,vm-prod-api-02,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D2s_v3,1 Hour,730,0.106,77.38
+sub-prod-00b2-xxxx,Production,rg-prod-compute-uks,vm-prod-db-01,Microsoft.Compute/virtualMachines,uksouth,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-prod-00b2-xxxx,Production,rg-prod-compute-uks,vm-prod-db-02,Microsoft.Compute/virtualMachines,uksouth,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-prod-00b2-xxxx,Production,rg-prod-storage,stprodlogs001,Microsoft.Storage/storageAccounts,westeurope,Standard_GRS,NDF,1 GB/Month,100,0.042,4.20
+sub-prod-00b2-xxxx,Production,rg-prod-storage,stprodbackups,Microsoft.Storage/storageAccounts,westeurope,Standard_GRS,NDF,1 GB/Month,100,0.042,4.20
+sub-prod-00b2-xxxx,Production,rg-prod-storage,stprodstatic,Microsoft.Storage/storageAccounts,westeurope,Standard_LRS,NDF,1 GB/Month,100,0.021,2.10
+sub-prod-00b2-xxxx,Production,rg-prod-storage,stprodpremium,Microsoft.Storage/storageAccounts,westeurope,Premium_LRS,NDF,1 GB/Month,100,0.17,17.00
+sub-prod-00b2-xxxx,Production,rg-prod-sql,myserver-prod/orders-db,Microsoft.Sql/servers/databases,westeurope,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-prod-00b2-xxxx,Production,rg-prod-sql,myserver-prod/analytics-db,Microsoft.Sql/servers/databases,westeurope,Standard,NDF,1 Hour,730,0.15,109.50
+sub-prod-00b2-xxxx,Production,rg-prod-web,asp-prod-main,Microsoft.Web/serverFarms,westeurope,NDF,P2v2,1 Hour,730,0.168,122.64
+sub-prod-00b2-xxxx,Production,rg-prod-web,asp-prod-api,Microsoft.Web/serverFarms,eastus,NDF,P1v2,1 Hour,730,0.08,58.40
+sub-prod-00b2-xxxx,Production,rg-prod-network,vnet-prod-westeurope,Microsoft.Network/virtualNetworks,westeurope,NDF,NDF,N/A (costs from peering/data transfer),0,0.00,0.00
+sub-prod-00b2-xxxx,Production,rg-prod-network,vnet-prod-uksouth,Microsoft.Network/virtualNetworks,uksouth,NDF,NDF,N/A (costs from peering/data transfer),0,0.00,0.00
