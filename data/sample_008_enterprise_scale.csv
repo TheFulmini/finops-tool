@@ -1,0 +1,68 @@
+subscription_id,subscription_name,resource_group,resource_name,resource_type,location,sku,size,unit,quantity,unit_price_usd,estimated_cost_usd
+sub-ent-prod-us,Enterprise Production US,rg-ent-compute-primary-web,vm-ent-web-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-ent-prod-us,Enterprise Production US,rg-ent-compute-primary-web,vm-ent-web-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-ent-prod-us,Enterprise Production US,rg-ent-compute-primary-web,vm-ent-web-03,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-ent-prod-us,Enterprise Production US,rg-ent-compute-primary-web,vm-ent-web-04,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-ent-prod-us,Enterprise Production US,rg-ent-compute-app,vm-ent-api-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-ent-prod-us,Enterprise Production US,rg-ent-compute-app,vm-ent-api-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-ent-prod-us,Enterprise Production US,rg-ent-compute-app,vm-ent-api-03,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-ent-prod-us,Enterprise Production US,rg-ent-compute-worker,vm-ent-worker-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-ent-prod-us,Enterprise Production US,rg-ent-compute-worker,vm-ent-worker-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-ent-prod-us,Enterprise Production US,rg-ent-compute-cache,vm-ent-cache-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E2s_v3,1 Hour,730,0.128,93.44
+sub-ent-prod-us,Enterprise Production US,rg-ent-storage-primary,stentprimary-hot,Microsoft.Storage/storageAccounts,eastus,Premium_LRS,NDF,1 GB/Month,5000,0.17,850.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-storage-primary,stentprimary-cold,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,10000,0.036,360.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-storage-backup,stentbackup-01,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,5000,0.036,180.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-storage-backup,stentbackup-02,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,3000,0.018,54.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-storage-logs,stentlogs,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,2000,0.018,36.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-storage-archive,stentarchive,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,15000,0.018,270.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-database-primary,sqlserver-primary-01,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-database-primary,sqlserver-primary-02,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-database-primary,sqlserver-primary-03,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-database-analytics,sqlserver-analytics-01,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-database-analytics,sqlserver-analytics-02,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-database-cache,sqlserver-cache,Microsoft.Sql/servers/databases,eastus,Standard,NDF,1 Hour,730,0.10,73.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-cosmosdb,cosmosdb-primary,Microsoft.DocumentDB/databaseAccounts,eastus,NDF,Multi-region,1 Hour,730,0.72,525.60
+sub-ent-prod-us,Enterprise Production US,rg-ent-postgres,postgresql-main,Microsoft.DBforPostgreSQL/servers,eastus,NDF,General Purpose,1 Hour,730,0.256,186.88
+sub-ent-prod-us,Enterprise Production US,rg-ent-web-main,asp-ent-main,Microsoft.Web/serverFarms,eastus,NDF,P3v2,1 Hour,730,0.252,183.96
+sub-ent-prod-us,Enterprise Production US,rg-ent-web-main,asp-ent-api,Microsoft.Web/serverFarms,eastus,NDF,P3v2,1 Hour,730,0.252,183.96
+sub-ent-prod-us,Enterprise Production US,rg-ent-web-worker,asp-ent-worker,Microsoft.Web/serverFarms,eastus,NDF,P2v2,1 Hour,730,0.168,122.64
+sub-ent-prod-us,Enterprise Production US,rg-ent-insights,appinsights-main,Microsoft.Insights/components,eastus,NDF,Enterprise,1 GB,500,2.00,1000.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-insights,appinsights-api,Microsoft.Insights/components,eastus,NDF,Enterprise,1 GB,300,2.00,600.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-logs,loganalytics-main,Microsoft.OperationalInsights/workspaces,eastus,NDF,PerGB2018,1 GB,300,2.30,690.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-security,keyvault-us,Microsoft.KeyVault/vaults,eastus,NDF,Standard,1 Month,1,5.00,5.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-messaging,servicebus-us,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,100,1.00,100.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-messaging,queue-us-01,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,50,1.00,50.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-messaging,queue-us-02,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,40,1.00,40.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-network-us,vnet-us,Microsoft.Network/virtualNetworks,eastus,NDF,NDF,N/A,0,0.00,0.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-network-us,appgateway-us,Microsoft.Network/applicationGateways,eastus,NDF,Standard_v2,1 Hour,730,0.30,219.00
+sub-ent-prod-us,Enterprise Production US,rg-ent-network-us,cdn-us,Microsoft.Cdn/profiles,eastus,NDF,Standard,1 Month,1,0.085,2.55
+sub-ent-prod-us,Enterprise Production US,rg-ent-network-us,loadbalancer-us,Microsoft.Network/loadBalancers,eastus,NDF,Standard,1 LB/Month,1,16.00,16.00
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-compute-eu-web,vm-ent-eu-web-01,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-compute-eu-web,vm-ent-eu-web-02,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-compute-eu-web,vm-ent-eu-web-03,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-compute-eu-api,vm-ent-eu-api-01,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-compute-eu-api,vm-ent-eu-api-02,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-storage-eu,stenteuda-hot,Microsoft.Storage/storageAccounts,westeurope,Premium_LRS,NDF,1 GB/Month,4000,0.17,680.00
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-storage-eu,stenteuda-cold,Microsoft.Storage/storageAccounts,westeurope,Standard_GRS,NDF,1 GB/Month,8000,0.036,288.00
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-storage-eu,stenteubackup,Microsoft.Storage/storageAccounts,westeurope,Standard_GRS,NDF,1 GB/Month,4000,0.036,144.00
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-database-eu,sqlserver-eu-01,Microsoft.Sql/servers/databases,westeurope,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-database-eu,sqlserver-eu-02,Microsoft.Sql/servers/databases,westeurope,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-database-eu-secondary,sqlserver-eu-secondary,Microsoft.Sql/servers/databases,westeurope,Standard,NDF,1 Hour,730,0.10,73.00
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-cosmosdb-eu,cosmosdb-eu,Microsoft.DocumentDB/databaseAccounts,westeurope,NDF,Multi-region,1 Hour,730,0.72,525.60
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-web-eu,asp-ent-eu-main,Microsoft.Web/serverFarms,westeurope,NDF,P3v2,1 Hour,730,0.252,183.96
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-web-eu,asp-ent-eu-api,Microsoft.Web/serverFarms,westeurope,NDF,P2v2,1 Hour,730,0.168,122.64
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-insights-eu,appinsights-eu,Microsoft.Insights/components,westeurope,NDF,Enterprise,1 GB,300,2.00,600.00
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-logs-eu,loganalytics-eu,Microsoft.OperationalInsights/workspaces,westeurope,NDF,PerGB2018,1 GB,200,2.30,460.00
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-security-eu,keyvault-eu,Microsoft.KeyVault/vaults,westeurope,NDF,Standard,1 Month,1,5.00,5.00
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-messaging-eu,servicebus-eu,Microsoft.ServiceBus/namespaces,westeurope,NDF,Standard,1 Million Ops,80,1.00,80.00
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-network-eu,vnet-eu,Microsoft.Network/virtualNetworks,westeurope,NDF,NDF,N/A,0,0.00,0.00
+sub-ent-prod-eu,Enterprise Production EU,rg-ent-network-eu,appgateway-eu,Microsoft.Network/applicationGateways,westeurope,NDF,Standard_v2,1 Hour,730,0.30,219.00
+sub-ent-dr,Enterprise Disaster Recovery,rg-ent-dr-compute,vm-ent-dr-01,Microsoft.Compute/virtualMachines,uksouth,NDF,Standard_D4s_v3,1 Hour,730,0.218,159.14
+sub-ent-dr,Enterprise Disaster Recovery,rg-ent-dr-compute,vm-ent-dr-02,Microsoft.Compute/virtualMachines,uksouth,NDF,Standard_D4s_v3,1 Hour,730,0.218,159.14
+sub-ent-dr,Enterprise Disaster Recovery,rg-ent-dr-compute,vm-ent-dr-03,Microsoft.Compute/virtualMachines,uksouth,NDF,Standard_D2s_v3,1 Hour,730,0.104,75.92
+sub-ent-dr,Enterprise Disaster Recovery,rg-ent-dr-storage,stentdr-hot,Microsoft.Storage/storageAccounts,uksouth,Standard_GRS,NDF,1 GB/Month,3000,0.042,126.00
+sub-ent-dr,Enterprise Disaster Recovery,rg-ent-dr-storage,stentdr-cold,Microsoft.Storage/storageAccounts,uksouth,Standard_LRS,NDF,1 GB/Month,2000,0.02,40.00
+sub-ent-dr,Enterprise Disaster Recovery,rg-ent-dr-database,sqlserver-dr-01,Microsoft.Sql/servers/databases,uksouth,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-ent-dr,Enterprise Disaster Recovery,rg-ent-dr-database,sqlserver-dr-02,Microsoft.Sql/servers/databases,uksouth,Standard,NDF,1 Hour,730,0.15,109.50
+sub-ent-dr,Enterprise Disaster Recovery,rg-ent-dr-web,asp-ent-dr,Microsoft.Web/serverFarms,uksouth,NDF,S2,1 Hour,730,0.128,93.44
+sub-ent-dr,Enterprise Disaster Recovery,rg-ent-dr-network,vnet-dr,Microsoft.Network/virtualNetworks,uksouth,NDF,NDF,N/A,0,0.00,0.00

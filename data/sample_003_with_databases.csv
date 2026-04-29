@@ -1,0 +1,25 @@
+subscription_id,subscription_name,resource_group,resource_name,resource_type,location,sku,size,unit,quantity,unit_price_usd,estimated_cost_usd
+sub-app-003,Application,rg-app-compute,vm-app-web-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-app-003,Application,rg-app-compute,vm-app-web-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-app-003,Application,rg-app-compute,vm-app-web-03,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-app-003,Application,rg-app-compute,vm-app-web-04,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-app-003,Application,rg-app-compute,vm-app-cache-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-app-003,Application,rg-app-compute,vm-app-cache-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-app-003,Application,rg-app-compute,vm-app-queue,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-app-003,Application,rg-app-storage,stappdata-hot,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,500,0.036,18.00
+sub-app-003,Application,rg-app-storage,stappdata-cold,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,1000,0.018,18.00
+sub-app-003,Application,rg-app-storage,stappbackup,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,300,0.036,10.80
+sub-app-003,Application,rg-app-storage,stapplogs,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,200,0.018,3.60
+sub-app-003,Application,rg-app-database,sqlserver-primary,Microsoft.Sql/servers/databases,eastus,Standard,NDF,1 Hour,730,0.10,73.00
+sub-app-003,Application,rg-app-database,sqlserver-reporting,Microsoft.Sql/servers/databases,eastus,Standard,NDF,1 Hour,730,0.10,73.00
+sub-app-003,Application,rg-app-database,sqlserver-cache,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-app-003,Application,rg-app-web,asp-app-main,Microsoft.Web/serverFarms,eastus,NDF,S1,1 Hour,730,0.064,46.72
+sub-app-003,Application,rg-app-web,asp-app-api,Microsoft.Web/serverFarms,eastus,NDF,S2,1 Hour,730,0.128,93.44
+sub-app-003,Application,rg-app-appinsights,appinsights-main,Microsoft.Insights/components,eastus,NDF,Standard,1 GB,50,2.00,100.00
+sub-app-003,Application,rg-app-network,vnet-app,Microsoft.Network/virtualNetworks,eastus,NDF,NDF,N/A,0,0.00,0.00
+sub-app-003,Application,rg-app-network,nsg-app,Microsoft.Network/networkSecurityGroups,eastus,NDF,NDF,1 NSG,1,0.50,0.50
+sub-app-003,Application,rg-app-network,pip-app-01,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-app-003,Application,rg-app-network,pip-app-02,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-app-003,Application,rg-app-network,pip-app-03,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-app-003,Application,rg-app-keyvault,keyvault-app,Microsoft.KeyVault/vaults,eastus,NDF,Standard,1 Month,1,5.00,5.00
+sub-app-003,Application,rg-app-messaging,queue-app,Microsoft.ServiceBus/namespaces,eastus,NDF,Basic,1 Million Ops,10,0.50,5.00

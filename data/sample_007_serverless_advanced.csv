@@ -1,0 +1,56 @@
+subscription_id,subscription_name,resource_group,resource_name,resource_type,location,sku,size,unit,quantity,unit_price_usd,estimated_cost_usd
+sub-server-007,Serverless Advanced,rg-server-compute-core,vm-server-core-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E8s_v3,1 Hour,730,0.528,385.44
+sub-server-007,Serverless Advanced,rg-server-compute-core,vm-server-core-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E8s_v3,1 Hour,730,0.528,385.44
+sub-server-007,Serverless Advanced,rg-server-compute-core,vm-server-core-03,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E8s_v3,1 Hour,730,0.528,385.44
+sub-server-007,Serverless Advanced,rg-server-compute-core,vm-server-core-04,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-server-007,Serverless Advanced,rg-server-compute-app,vm-server-app-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-server-007,Serverless Advanced,rg-server-compute-app,vm-server-app-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-server-007,Serverless Advanced,rg-server-compute-app,vm-server-app-03,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-server-007,Serverless Advanced,rg-server-compute-worker,vm-server-worker-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-server-007,Serverless Advanced,rg-server-compute-worker,vm-server-worker-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-server-007,Serverless Advanced,rg-server-compute-monitor,vm-server-monitor,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-server-007,Serverless Advanced,rg-server-storage-hot,stserverdata-hot,Microsoft.Storage/storageAccounts,eastus,Premium_LRS,NDF,1 GB/Month,1000,0.17,170.00
+sub-server-007,Serverless Advanced,rg-server-storage-hot,stserverblob,Microsoft.Storage/storageAccounts,eastus,Premium_LRS,NDF,1 GB/Month,500,0.17,85.00
+sub-server-007,Serverless Advanced,rg-server-storage-cold,stserverdata-cold,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,2000,0.036,72.00
+sub-server-007,Serverless Advanced,rg-server-storage-cold,stserverarchive,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,3000,0.018,54.00
+sub-server-007,Serverless Advanced,rg-server-storage-backup,stserverbackup,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,1500,0.036,54.00
+sub-server-007,Serverless Advanced,rg-server-database-main,sqlserver-main-01,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-server-007,Serverless Advanced,rg-server-database-main,sqlserver-main-02,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-server-007,Serverless Advanced,rg-server-database-analytics,sqlserver-analytics,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-server-007,Serverless Advanced,rg-server-database-reporting,sqlserver-reporting,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-server-007,Serverless Advanced,rg-server-database-cache,sqlserver-cache,Microsoft.Sql/servers/databases,eastus,Standard,NDF,1 Hour,730,0.10,73.00
+sub-server-007,Serverless Advanced,rg-server-cosmosdb,cosmosdb-main,Microsoft.DocumentDB/databaseAccounts,eastus,NDF,Multi-region,1 Hour,730,0.72,525.60
+sub-server-007,Serverless Advanced,rg-server-cosmosdb,cosmosdb-secondary,Microsoft.DocumentDB/databaseAccounts,eastus,NDF,Multi-region,1 Hour,730,0.36,262.80
+sub-server-007,Serverless Advanced,rg-server-postgres,postgresql-main,Microsoft.DBforPostgreSQL/servers,eastus,NDF,General Purpose,1 Hour,730,0.256,186.88
+sub-server-007,Serverless Advanced,rg-server-mysql,mysql-main,Microsoft.DBforMySQL/servers,eastus,NDF,General Purpose,1 Hour,730,0.25,182.50
+sub-server-007,Serverless Advanced,rg-server-web-main,asp-server-main,Microsoft.Web/serverFarms,eastus,NDF,P3v2,1 Hour,730,0.252,183.96
+sub-server-007,Serverless Advanced,rg-server-web-main,asp-server-api,Microsoft.Web/serverFarms,eastus,NDF,P2v2,1 Hour,730,0.168,122.64
+sub-server-007,Serverless Advanced,rg-server-web-main,asp-server-worker,Microsoft.Web/serverFarms,eastus,NDF,P2v2,1 Hour,730,0.168,122.64
+sub-server-007,Serverless Advanced,rg-server-appinsights,appinsights-main,Microsoft.Insights/components,eastus,NDF,Enterprise,1 GB,200,2.00,400.00
+sub-server-007,Serverless Advanced,rg-server-appinsights,appinsights-api,Microsoft.Insights/components,eastus,NDF,Enterprise,1 GB,150,2.00,300.00
+sub-server-007,Serverless Advanced,rg-server-appinsights,appinsights-worker,Microsoft.Insights/components,eastus,NDF,Enterprise,1 GB,100,2.00,200.00
+sub-server-007,Serverless Advanced,rg-server-monitoring,loganalytics-main,Microsoft.OperationalInsights/workspaces,eastus,NDF,PerGB2018,1 GB,200,2.30,460.00
+sub-server-007,Serverless Advanced,rg-server-monitoring,loganalytics-security,Microsoft.OperationalInsights/workspaces,eastus,NDF,PerGB2018,1 GB,100,2.30,230.00
+sub-server-007,Serverless Advanced,rg-server-serverless,function-processor,Microsoft.Web/sites,eastus,NDF,Dynamic,1 Million Executions,20,0.20,4.00
+sub-server-007,Serverless Advanced,rg-server-serverless,function-scheduler,Microsoft.Web/sites,eastus,NDF,Dynamic,1 Million Executions,15,0.20,3.00
+sub-server-007,Serverless Advanced,rg-server-serverless,function-webhook,Microsoft.Web/sites,eastus,NDF,Dynamic,1 Million Executions,10,0.20,2.00
+sub-server-007,Serverless Advanced,rg-server-serverless,function-api,Microsoft.Web/sites,eastus,NDF,Dynamic,1 Million Executions,8,0.20,1.60
+sub-server-007,Serverless Advanced,rg-server-messaging,servicebus-main,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,100,1.00,100.00
+sub-server-007,Serverless Advanced,rg-server-messaging,servicebus-secondary,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,50,1.00,50.00
+sub-server-007,Serverless Advanced,rg-server-messaging,queue-main-01,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,40,1.00,40.00
+sub-server-007,Serverless Advanced,rg-server-messaging,queue-main-02,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,30,1.00,30.00
+sub-server-007,Serverless Advanced,rg-server-messaging,queue-worker-01,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,20,1.00,20.00
+sub-server-007,Serverless Advanced,rg-server-eventgrid,eventgrid-main,Microsoft.EventGrid/topics,eastus,NDF,Standard,1 Million Events,50,0.50,25.00
+sub-server-007,Serverless Advanced,rg-server-security,keyvault-main,Microsoft.KeyVault/vaults,eastus,NDF,Standard,1 Month,1,5.00,5.00
+sub-server-007,Serverless Advanced,rg-server-security,keyvault-secondary,Microsoft.KeyVault/vaults,eastus,NDF,Standard,1 Month,1,5.00,5.00
+sub-server-007,Serverless Advanced,rg-server-network,vnet-server,Microsoft.Network/virtualNetworks,eastus,NDF,NDF,N/A,0,0.00,0.00
+sub-server-007,Serverless Advanced,rg-server-network,nsg-main,Microsoft.Network/networkSecurityGroups,eastus,NDF,NDF,1 NSG,1,0.50,0.50
+sub-server-007,Serverless Advanced,rg-server-network,nsg-db,Microsoft.Network/networkSecurityGroups,eastus,NDF,NDF,1 NSG,1,0.50,0.50
+sub-server-007,Serverless Advanced,rg-server-network,nsg-app,Microsoft.Network/networkSecurityGroups,eastus,NDF,NDF,1 NSG,1,0.50,0.50
+sub-server-007,Serverless Advanced,rg-server-network,pip-01,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-server-007,Serverless Advanced,rg-server-network,pip-02,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-server-007,Serverless Advanced,rg-server-network,pip-03,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-server-007,Serverless Advanced,rg-server-network,pip-04,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-server-007,Serverless Advanced,rg-server-network,appgateway-main,Microsoft.Network/applicationGateways,eastus,NDF,Standard_v2,1 Hour,730,0.30,219.00
+sub-server-007,Serverless Advanced,rg-server-network,cdn-main,Microsoft.Cdn/profiles,eastus,NDF,Standard,1 Month,1,0.085,2.55
+sub-server-007,Serverless Advanced,rg-server-network,loadbalancer-main,Microsoft.Network/loadBalancers,eastus,NDF,Standard,1 LB/Month,1,16.00,16.00

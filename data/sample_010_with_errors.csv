@@ -1,0 +1,74 @@
+subscription_id,subscription_name,resource_group,resource_name,resource_type,location,sku,size,unit,quantity,unit_price_usd,estimated_cost_usd
+sub-error-test-01,Error Test Suite,rg-error-valid-01,vm-valid-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-error-test-01,Error Test Suite,rg-error-valid-01,vm-valid-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-error-test-01,Error Test Suite,rg-error-valid-01,st-valid-01,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,100,0.018,1.80
+sub-error-test-01,Error Test Suite,rg-error-valid-01,sql-valid-01,Microsoft.Sql/servers/databases,eastus,Standard,NDF,1 Hour,730,0.10,73.00
+sub-error-test-01,Error Test Suite,rg-error-valid-02,vm-valid-03,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-valid-02,st-valid-02,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,200,0.036,7.20
+sub-error-test-01,Error Test Suite,rg-error-missing-loc,vm-missing-location,Microsoft.Compute/virtualMachines,,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-error-test-01,Error Test Suite,rg-error-missing-type,,st-missing-type,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,500,0.018,9.00
+sub-error-test-01,Error Test Suite,rg-error-invalid-type,vm-invalid-resource,Invalid.Resource/Type,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-error-test-01,Error Test Suite,rg-error-invalid-qty,vm-bad-quantity,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,not_number,0.096,70.08
+sub-error-test-01,Error Test Suite,rg-error-invalid-price,st-bad-price,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,500,invalid_price,0.00
+sub-error-test-01,Error Test Suite,rg-error-invalid-cost,st-bad-cost,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,500,0.018,invalid_cost
+sub-error-test-01,Error Test Suite,rg-error-missing-sub,,rg-error-missing-sub,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,300,0.018,5.40
+sub-error-test-01,Error Test Suite,rg-error-empty-sub,,,,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-negative,vm-negative-cost,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,-0.0416,-30.37
+sub-error-test-01,Error Test Suite,rg-error-zero-qty,vm-zero-quantity,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,0,0.0416,0.00
+sub-error-test-01,Error Test Suite,rg-error-extreme,vm-extreme-qty,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E8s_v3,1 Hour,999999,0.528,527999.92
+sub-error-test-01,Error Test Suite,rg-error-extreme,st-extreme-gb,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,9999999,0.018,179999.82
+sub-error-test-01,Error Test Suite,rg-error-float,vm-float-qty,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,365.5,0.0416,15.19
+sub-error-test-01,Error Test Suite,rg-error-white-space,vm-space, ,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-sku-empty,st-empty-sku,Microsoft.Storage/storageAccounts,eastus,,NDF,1 GB/Month,200,0.018,3.60
+sub-error-test-01,Error Test Suite,rg-error-size-empty,vm-empty-size,Microsoft.Compute/virtualMachines,eastus,NDF,,1 Hour,730,0.096,70.08
+sub-error-test-01,Error Test Suite,rg-error-unit-empty,asp-empty-unit,Microsoft.Web/serverFarms,eastus,NDF,S1,,730,0.064,46.72
+sub-error-test-01,Error Test Suite,rg-error-special-chars,vm-special-!@#$,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-error-test-01,Error Test Suite,rg-error-very-long-name,vm-this-is-a-very-long-resource-name-that-exceeds-normal-length-conventions-and-should-be-tested-for-truncation-xxxxxxxxxxxxxxxxxxxxxxxx,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-duplicate-01,vm-duplicate,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-duplicate-02,vm-duplicate,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-mixed,st-test-01,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,100,0.018,1.80
+sub-error-test-01,Error Test Suite,rg-error-mixed,st-test-02,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,200,0.036,7.20
+sub-error-test-01,Error Test Suite,rg-error-mixed,st-test-03,Microsoft.Storage/storageAccounts,eastus,Premium_LRS,NDF,1 GB/Month,150,0.17,25.50
+sub-error-test-01,Error Test Suite,rg-error-case-sensitive,VM-case-test,Microsoft.Compute/virtualMachines,EastUS,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-region-invalid,vm-bad-region,Microsoft.Compute/virtualMachines,invalid-region,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-region-typo,vm-typo-region,Microsoft.Compute/virtualMachines,eatus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-unicode,vm-unicode-中文,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-comma-field,"vm-comma,test",Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-quotes,vm-quote-"test",Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-leading-zero,vm-zero-test,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,0730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-scientific,vm-sci-notation,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,7.3e2,0.096,70.08
+sub-error-test-01,Error Test Suite,rg-error-valid-final-01,vm-final-valid-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-error-test-01,Error Test Suite,rg-error-valid-final-01,st-final-valid-01,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,500,0.018,9.00
+sub-error-test-01,Error Test Suite,rg-error-valid-final-02,vm-final-valid-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-valid-final-02,sql-final-valid-02,Microsoft.Sql/servers/databases,eastus,Standard,NDF,1 Hour,730,0.10,73.00
+sub-error-test-01,Error Test Suite,rg-error-valid-final-02,asp-final-valid-02,Microsoft.Web/serverFarms,eastus,NDF,S1,1 Hour,730,0.064,46.72
+sub-error-test-01,Error Test Suite,rg-error-boundary-01,vm-large-unit,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E20s_v3,1 Hour,730,1.254,915.42
+sub-error-test-01,Error Test Suite,rg-error-boundary-01,st-large-storage,Microsoft.Storage/storageAccounts,eastus,Premium_LRS,NDF,1 GB/Month,50000,0.17,8500.00
+sub-error-test-01,Error Test Suite,rg-error-boundary-02,sql-expensive,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-error-test-01,Error Test Suite,rg-error-boundary-02,cosmosdb-global,Microsoft.DocumentDB/databaseAccounts,eastus,NDF,Multi-region,1 Hour,730,0.72,525.60
+sub-error-test-01,Error Test Suite,rg-error-partial-01,vm-partial,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-error-test-01,Error Test Suite,rg-error-partial-01,,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,300,0.018,5.40
+sub-error-test-01,Error Test Suite,rg-error-sku-variations,vm-sku-test-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B1s,1 Hour,730,0.0193,14.09
+sub-error-test-01,Error Test Suite,rg-error-sku-variations,vm-sku-test-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-sku-variations,vm-sku-test-03,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-error-test-01,Error Test Suite,rg-error-sku-variations,vm-sku-test-04,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-error-test-01,Error Test Suite,rg-error-sku-variations,vm-sku-test-05,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-error-test-01,Error Test Suite,rg-error-region-variations,vm-us-east-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-error-test-01,Error Test Suite,rg-error-region-variations,vm-eu-west-01,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D2s_v3,1 Hour,730,0.106,77.38
+sub-error-test-01,Error Test Suite,rg-error-region-variations,vm-asia-se-01,Microsoft.Compute/virtualMachines,southeastasia,NDF,Standard_D2s_v3,1 Hour,730,0.111,81.03
+sub-error-test-01,Error Test Suite,rg-error-region-variations,vm-uk-south-01,Microsoft.Compute/virtualMachines,uksouth,NDF,Standard_D2s_v3,1 Hour,730,0.104,75.92
+sub-error-test-01,Error Test Suite,rg-error-resource-types,vm-compute,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-resource-types,st-storage,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,200,0.018,3.60
+sub-error-test-01,Error Test Suite,rg-error-resource-types,sql-database,Microsoft.Sql/servers/databases,eastus,Standard,NDF,1 Hour,730,0.10,73.00
+sub-error-test-01,Error Test Suite,rg-error-resource-types,asp-appservice,Microsoft.Web/serverFarms,eastus,NDF,S1,1 Hour,730,0.064,46.72
+sub-error-test-01,Error Test Suite,rg-error-resource-types,vnet-network,Microsoft.Network/virtualNetworks,eastus,NDF,NDF,N/A,0,0.00,0.00
+sub-error-test-01,Error Test Suite,rg-error-edge-cases,vm-edge-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B1s,1 Hour,1,0.0193,0.02
+sub-error-test-01,Error Test Suite,rg-error-edge-cases,vm-edge-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B1s,1 Hour,8760,0.0193,168.57
+sub-error-test-01,Error Test Suite,rg-error-mixed-valid,cosmosdb-cosmos,Microsoft.DocumentDB/databaseAccounts,eastus,NDF,Multi-region,1 Hour,730,0.72,525.60
+sub-error-test-01,Error Test Suite,rg-error-mixed-valid,postgresql-pg,Microsoft.DBforPostgreSQL/servers,eastus,NDF,General Purpose,1 Hour,730,0.256,186.88
+sub-error-test-01,Error Test Suite,rg-error-mixed-valid,appinsights-ai,Microsoft.Insights/components,eastus,NDF,Enterprise,1 GB,100,2.00,200.00
+sub-error-test-01,Error Test Suite,rg-error-mixed-valid,loganalytics-la,Microsoft.OperationalInsights/workspaces,eastus,NDF,PerGB2018,1 GB,50,2.30,115.00
+sub-error-test-01,Error Test Suite,rg-error-mixed-valid,keyvault-kv,Microsoft.KeyVault/vaults,eastus,NDF,Standard,1 Month,1,5.00,5.00
+sub-error-test-01,Error Test Suite,rg-error-mixed-valid,servicebus-sb,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,20,1.00,20.00
+sub-error-test-01,Error Test Suite,rg-error-trailing-space,vm-space-test ,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-error-test-01,Error Test Suite,rg-error-leading-space, vm-space-test,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37

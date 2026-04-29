@@ -1,0 +1,16 @@
+subscription_id,subscription_name,resource_group,resource_name,resource_type,location,sku,size,unit,quantity,unit_price_usd,estimated_cost_usd
+sub-compute-002,Compute Lab,rg-compute-web,vm-web-01,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-compute-002,Compute Lab,rg-compute-web,vm-web-02,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-compute-002,Compute Lab,rg-compute-web,vm-web-03,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-compute-002,Compute Lab,rg-compute-web,vm-web-04,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D2s_v3,1 Hour,730,0.106,77.38
+sub-compute-002,Compute Lab,rg-compute-db,vm-db-01,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_E2s_v3,1 Hour,730,0.128,93.44
+sub-compute-002,Compute Lab,rg-compute-db,vm-db-02,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_E2s_v3,1 Hour,730,0.128,93.44
+sub-compute-002,Compute Lab,rg-compute-db,vm-db-03,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-compute-002,Compute Lab,rg-compute-cache,vm-cache-01,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D2s_v3,1 Hour,730,0.106,77.38
+sub-compute-002,Compute Lab,rg-compute-storage,stsysdata,Microsoft.Storage/storageAccounts,westeurope,Standard_LRS,NDF,1 GB/Month,200,0.018,3.60
+sub-compute-002,Compute Lab,rg-compute-storage,stsysbackup,Microsoft.Storage/storageAccounts,westeurope,Standard_GRS,NDF,1 GB/Month,150,0.036,5.40
+sub-compute-002,Compute Lab,rg-compute-storage,stsyslogs,Microsoft.Storage/storageAccounts,westeurope,Standard_LRS,NDF,1 GB/Month,100,0.018,1.80
+sub-compute-002,Compute Lab,rg-compute-network,vnet-main,Microsoft.Network/virtualNetworks,westeurope,NDF,NDF,N/A,0,0.00,0.00
+sub-compute-002,Compute Lab,rg-compute-network,nsg-main,Microsoft.Network/networkSecurityGroups,westeurope,NDF,NDF,1 NSG,1,0.50,0.50
+sub-compute-002,Compute Lab,rg-compute-network,pip-web-01,Microsoft.Network/publicIPAddresses,westeurope,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-compute-002,Compute Lab,rg-compute-network,pip-web-02,Microsoft.Network/publicIPAddresses,westeurope,NDF,NDF,1 IP/Month,1,2.50,2.50

@@ -1,0 +1,75 @@
+subscription_id,subscription_name,resource_group,resource_name,resource_type,location,sku,size,unit,quantity,unit_price_usd,estimated_cost_usd
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-compute-primary,vm-tenant-web-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-compute-primary,vm-tenant-web-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-compute-primary,vm-tenant-web-03,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-compute-primary,vm-tenant-web-04,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-compute-primary,vm-tenant-web-05,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-compute-api,vm-tenant-api-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-compute-api,vm-tenant-api-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-compute-api,vm-tenant-api-03,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-compute-api,vm-tenant-api-04,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-compute-worker,vm-tenant-worker-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-compute-worker,vm-tenant-worker-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-compute-worker,vm-tenant-worker-03,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-compute-cache,vm-tenant-cache-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E8s_v3,1 Hour,730,0.528,385.44
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-compute-cache,vm-tenant-cache-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E8s_v3,1 Hour,730,0.528,385.44
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-storage-hot-1,sttenant-hot-1,Microsoft.Storage/storageAccounts,eastus,Premium_LRS,NDF,1 GB/Month,3000,0.17,510.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-storage-hot-1,sttenant-hot-2,Microsoft.Storage/storageAccounts,eastus,Premium_LRS,NDF,1 GB/Month,2000,0.17,340.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-storage-cold-1,sttenant-cold-1,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,5000,0.036,180.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-storage-cold-1,sttenant-cold-2,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,5000,0.036,180.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-storage-cold-1,sttenant-archive,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,20000,0.018,360.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-storage-backup,sttenant-backup-1,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,8000,0.036,288.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-storage-backup,sttenant-backup-2,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,5000,0.036,180.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-database-main,sqlserver-main-01,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-database-main,sqlserver-main-02,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-database-main,sqlserver-main-03,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-database-main,sqlserver-main-04,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-database-analytics,sqlserver-analytics-01,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-database-analytics,sqlserver-analytics-02,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-database-cache,sqlserver-cache-01,Microsoft.Sql/servers/databases,eastus,Standard,NDF,1 Hour,730,0.10,73.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-database-cache,sqlserver-cache-02,Microsoft.Sql/servers/databases,eastus,Standard,NDF,1 Hour,730,0.10,73.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-cosmosdb-main,cosmosdb-main-01,Microsoft.DocumentDB/databaseAccounts,eastus,NDF,Multi-region,1 Hour,730,0.72,525.60
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-cosmosdb-main,cosmosdb-main-02,Microsoft.DocumentDB/databaseAccounts,eastus,NDF,Multi-region,1 Hour,730,0.36,262.80
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-postgresql,postgresql-main-01,Microsoft.DBforPostgreSQL/servers,eastus,NDF,General Purpose,1 Hour,730,0.256,186.88
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-postgresql,postgresql-main-02,Microsoft.DBforPostgreSQL/servers,eastus,NDF,General Purpose,1 Hour,730,0.256,186.88
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-mysql,mysql-main,Microsoft.DBforMySQL/servers,eastus,NDF,General Purpose,1 Hour,730,0.25,182.50
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-web-main,asp-tenant-main-01,Microsoft.Web/serverFarms,eastus,NDF,P3v2,1 Hour,730,0.252,183.96
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-web-main,asp-tenant-main-02,Microsoft.Web/serverFarms,eastus,NDF,P3v2,1 Hour,730,0.252,183.96
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-web-api,asp-tenant-api-01,Microsoft.Web/serverFarms,eastus,NDF,P3v2,1 Hour,730,0.252,183.96
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-web-api,asp-tenant-api-02,Microsoft.Web/serverFarms,eastus,NDF,P2v2,1 Hour,730,0.168,122.64
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-web-worker,asp-tenant-worker,Microsoft.Web/serverFarms,eastus,NDF,P2v2,1 Hour,730,0.168,122.64
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-appinsights,appinsights-main-01,Microsoft.Insights/components,eastus,NDF,Enterprise,1 GB,300,2.00,600.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-appinsights,appinsights-main-02,Microsoft.Insights/components,eastus,NDF,Enterprise,1 GB,250,2.00,500.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-appinsights,appinsights-api,Microsoft.Insights/components,eastus,NDF,Enterprise,1 GB,200,2.00,400.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-appinsights,appinsights-worker,Microsoft.Insights/components,eastus,NDF,Enterprise,1 GB,150,2.00,300.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-logs,loganalytics-main,Microsoft.OperationalInsights/workspaces,eastus,NDF,PerGB2018,1 GB,500,2.30,1150.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-logs,loganalytics-security,Microsoft.OperationalInsights/workspaces,eastus,NDF,PerGB2018,1 GB,300,2.30,690.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-security,keyvault-main,Microsoft.KeyVault/vaults,eastus,NDF,Standard,1 Month,1,5.00,5.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-security,keyvault-secondary,Microsoft.KeyVault/vaults,eastus,NDF,Standard,1 Month,1,5.00,5.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-messaging-main,servicebus-main,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,150,1.00,150.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-messaging-main,queue-main-01,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,80,1.00,80.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-messaging-main,queue-main-02,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,60,1.00,60.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-messaging-worker,servicebus-worker,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,80,1.00,80.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-messaging-worker,queue-worker-01,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,40,1.00,40.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-messaging-worker,queue-worker-02,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,30,1.00,30.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-eventgrid,eventgrid-main,Microsoft.EventGrid/topics,eastus,NDF,Standard,1 Million Events,100,0.50,50.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-main,vnet-main,Microsoft.Network/virtualNetworks,eastus,NDF,NDF,N/A,0,0.00,0.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-main,nsg-web,Microsoft.Network/networkSecurityGroups,eastus,NDF,NDF,1 NSG,1,0.50,0.50
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-main,nsg-api,Microsoft.Network/networkSecurityGroups,eastus,NDF,NDF,1 NSG,1,0.50,0.50
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-main,nsg-db,Microsoft.Network/networkSecurityGroups,eastus,NDF,NDF,1 NSG,1,0.50,0.50
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-main,nsg-worker,Microsoft.Network/networkSecurityGroups,eastus,NDF,NDF,1 NSG,1,0.50,0.50
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-ips,pip-01,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-ips,pip-02,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-ips,pip-03,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-ips,pip-04,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-ips,pip-05,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-gateway,appgateway-main,Microsoft.Network/applicationGateways,eastus,NDF,Standard_v2,1 Hour,730,0.30,219.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-gateway,appgateway-api,Microsoft.Network/applicationGateways,eastus,NDF,Standard_v2,1 Hour,730,0.30,219.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-lb,loadbalancer-main,Microsoft.Network/loadBalancers,eastus,NDF,Standard,1 LB/Month,1,16.00,16.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-lb,loadbalancer-api,Microsoft.Network/loadBalancers,eastus,NDF,Standard,1 LB/Month,1,16.00,16.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-network-cdn,cdn-main,Microsoft.Cdn/profiles,eastus,NDF,Premium,1 Month,1,0.20,6.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-serverless,function-processor-01,Microsoft.Web/sites,eastus,NDF,Dynamic,1 Million Executions,30,0.20,6.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-serverless,function-processor-02,Microsoft.Web/sites,eastus,NDF,Dynamic,1 Million Executions,20,0.20,4.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-serverless,function-scheduler,Microsoft.Web/sites,eastus,NDF,Dynamic,1 Million Executions,15,0.20,3.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-serverless,function-webhook,Microsoft.Web/sites,eastus,NDF,Dynamic,1 Million Executions,10,0.20,2.00
+sub-tenant-prod-main,Multi-Tenant Production,rg-tenant-serverless,function-api,Microsoft.Web/sites,eastus,NDF,Dynamic,1 Million Executions,10,0.20,2.00

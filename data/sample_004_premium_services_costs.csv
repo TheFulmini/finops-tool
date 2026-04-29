@@ -1,0 +1,33 @@
+﻿subscription_id,subscription_name,resource_group,resource_name,resource_type,location,sku,size,unit,quantity,unit_price_usd,estimated_cost_usd
+sub-premium-004,Premium Services,rg-premium-compute,vm-premium-web-01,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D4s_v3,1 Hour,730,0.0444,32.377
+sub-premium-004,Premium Services,rg-premium-compute,vm-premium-web-02,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D4s_v3,1 Hour,730,0.0444,32.377
+sub-premium-004,Premium Services,rg-premium-compute,vm-premium-web-03,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D4s_v3,1 Hour,730,0.0444,32.377
+sub-premium-004,Premium Services,rg-premium-compute,vm-premium-web-04,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D4s_v3,1 Hour,730,0.0444,32.377
+sub-premium-004,Premium Services,rg-premium-compute,vm-premium-cache-01,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_E2s_v3,1 Hour,730,0.0296,21.5846
+sub-premium-004,Premium Services,rg-premium-compute,vm-premium-cache-02,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_E2s_v3,1 Hour,730,0.0296,21.5846
+sub-premium-004,Premium Services,rg-premium-compute,vm-premium-cache-03,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_E2s_v3,1 Hour,730,0.0296,21.5846
+sub-premium-004,Premium Services,rg-premium-compute,vm-premium-monitor,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D2s_v3,1 Hour,730,0.0222,16.1885
+sub-premium-004,Premium Services,rg-premium-storage,stpremium-hot,Microsoft.Storage/storageAccounts,westeurope,Premium_LRS,NDF,1 GiB/Hour,100,0.0001,0.013
+sub-premium-004,Premium Services,rg-premium-storage,stpremium-cold,Microsoft.Storage/storageAccounts,westeurope,Standard_GRS,NDF,1 GB/Month,100,0.0448,4.48
+sub-premium-004,Premium Services,rg-premium-storage,stpremium-archive,Microsoft.Storage/storageAccounts,westeurope,Standard_LRS,NDF,1 GB/Month,100,0.0224,2.24
+sub-premium-004,Premium Services,rg-premium-storage,stpremium-backup,Microsoft.Storage/storageAccounts,westeurope,Standard_GRS,NDF,1 GB/Month,100,0.0448,4.48
+sub-premium-004,Premium Services,rg-premium-database,sqlserver-prod-01,Microsoft.Sql/servers/databases,westeurope,GeneralPurpose,NDF,1 Hour,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-database,sqlserver-prod-02,Microsoft.Sql/servers/databases,westeurope,GeneralPurpose,NDF,1 Hour,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-database,sqlserver-analytics,Microsoft.Sql/servers/databases,westeurope,GeneralPurpose,NDF,1 Hour,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-database,sqlserver-reporting,Microsoft.Sql/servers/databases,westeurope,GeneralPurpose,NDF,1 Hour,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-database,cosmosdb-main,Microsoft.DocumentDB/databaseAccounts,westeurope,NDF,Multi-region,Unsupported type,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-web,asp-premium-main,Microsoft.Web/serverFarms,westeurope,NDF,P2v2,1 Hour,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-web,asp-premium-api,Microsoft.Web/serverFarms,westeurope,NDF,P1v2,1 Hour,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-web,asp-premium-worker,Microsoft.Web/serverFarms,westeurope,NDF,P1v2,1 Hour,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-appinsights,appinsights-premium,Microsoft.Insights/components,westeurope,NDF,Enterprise,Unsupported type,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-keyvault,keyvault-premium,Microsoft.KeyVault/vaults,westeurope,NDF,Standard,Unsupported type,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-messaging,servicebus-premium,Microsoft.ServiceBus/namespaces,westeurope,NDF,Standard,Unsupported type,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-messaging,queue-premium-01,Microsoft.ServiceBus/namespaces,westeurope,NDF,Standard,Unsupported type,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-network,vnet-premium,Microsoft.Network/virtualNetworks,westeurope,NDF,NDF,N/A (costs from peering/data transfer),0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-network,nsg-premium,Microsoft.Network/networkSecurityGroups,westeurope,NDF,NDF,Unsupported type,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-network,pip-premium-01,Microsoft.Network/publicIPAddresses,westeurope,NDF,NDF,Unsupported type,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-network,pip-premium-02,Microsoft.Network/publicIPAddresses,westeurope,NDF,NDF,Unsupported type,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-network,pip-premium-03,Microsoft.Network/publicIPAddresses,westeurope,NDF,NDF,Unsupported type,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-network,appgateway-premium,Microsoft.Network/applicationGateways,westeurope,NDF,Standard_Medium,Unsupported type,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-network,cdn-premium,Microsoft.Cdn/profiles,westeurope,NDF,Standard,Unsupported type,0,0.0,0.0
+sub-premium-004,Premium Services,rg-premium-monitoring,loganalytics-premium,Microsoft.OperationalInsights/workspaces,westeurope,NDF,PerGB2018,Unsupported type,0,0.0,0.0

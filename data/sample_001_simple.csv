@@ -1,0 +1,6 @@
+subscription_id,subscription_name,resource_group,resource_name,resource_type,location,sku,size,unit,quantity,unit_price_usd,estimated_cost_usd
+sub-simple-001,Simple Lab,rg-lab-compute,vm-lab-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B1s,1 Hour,730,0.0193,14.09
+sub-simple-001,Simple Lab,rg-lab-compute,vm-lab-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B1s,1 Hour,730,0.0193,14.09
+sub-simple-001,Simple Lab,rg-lab-storage,stlabdata,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,50,0.018,0.90
+sub-simple-001,Simple Lab,rg-lab-storage,stlablog,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,30,0.018,0.54
+sub-simple-001,Simple Lab,rg-lab-network,vnet-lab,Microsoft.Network/virtualNetworks,eastus,NDF,NDF,N/A,0,0.00,0.00

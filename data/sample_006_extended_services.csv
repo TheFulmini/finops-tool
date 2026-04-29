@@ -1,0 +1,42 @@
+subscription_id,subscription_name,resource_group,resource_name,resource_type,location,sku,size,unit,quantity,unit_price_usd,estimated_cost_usd
+sub-extend-006,Extended Services,rg-extend-compute-core,vm-ext-app-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-extend-006,Extended Services,rg-extend-compute-core,vm-ext-app-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-extend-006,Extended Services,rg-extend-compute-core,vm-ext-app-03,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-extend-006,Extended Services,rg-extend-compute-core,vm-ext-app-04,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-extend-006,Extended Services,rg-extend-compute-cache,vm-ext-cache-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E2s_v3,1 Hour,730,0.128,93.44
+sub-extend-006,Extended Services,rg-extend-compute-cache,vm-ext-cache-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_E2s_v3,1 Hour,730,0.128,93.44
+sub-extend-006,Extended Services,rg-extend-compute-monitor,vm-ext-monitor-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-extend-006,Extended Services,rg-extend-storage-hot,stextdata-hot,Microsoft.Storage/storageAccounts,eastus,Premium_LRS,NDF,1 GB/Month,500,0.17,85.00
+sub-extend-006,Extended Services,rg-extend-storage-hot,stextpremium,Microsoft.Storage/storageAccounts,eastus,Premium_LRS,NDF,1 GB/Month,300,0.17,51.00
+sub-extend-006,Extended Services,rg-extend-storage-cold,stextdata-cold,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,1000,0.036,36.00
+sub-extend-006,Extended Services,rg-extend-storage-cold,stextarchive,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,2000,0.018,36.00
+sub-extend-006,Extended Services,rg-extend-storage-backup,stextbackup,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,800,0.036,28.80
+sub-extend-006,Extended Services,rg-extend-database-main,sqlserver-ext-main,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-extend-006,Extended Services,rg-extend-database-main,sqlserver-ext-analytics,Microsoft.Sql/servers/databases,eastus,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-extend-006,Extended Services,rg-extend-database-cache,sqlserver-ext-cache,Microsoft.Sql/servers/databases,eastus,Standard,NDF,1 Hour,730,0.10,73.00
+sub-extend-006,Extended Services,rg-extend-database-noSQL,cosmosdb-main,Microsoft.DocumentDB/databaseAccounts,eastus,NDF,Multi-region,1 Hour,730,0.18,131.40
+sub-extend-006,Extended Services,rg-extend-database-nosql,cosmosdb-secondary,Microsoft.DocumentDB/databaseAccounts,eastus,NDF,Multi-region,1 Hour,730,0.36,262.80
+sub-extend-006,Extended Services,rg-extend-web-main,asp-ext-main,Microsoft.Web/serverFarms,eastus,NDF,P2v2,1 Hour,730,0.168,122.64
+sub-extend-006,Extended Services,rg-extend-web-main,asp-ext-api,Microsoft.Web/serverFarms,eastus,NDF,P1v2,1 Hour,730,0.08,58.40
+sub-extend-006,Extended Services,rg-extend-web-worker,asp-ext-worker,Microsoft.Web/serverFarms,eastus,NDF,P1v2,1 Hour,730,0.08,58.40
+sub-extend-006,Extended Services,rg-extend-appinsights,appinsights-ext,Microsoft.Insights/components,eastus,NDF,Enterprise,1 GB,100,2.00,200.00
+sub-extend-006,Extended Services,rg-extend-appinsights,appinsights-api,Microsoft.Insights/components,eastus,NDF,Enterprise,1 GB,80,2.00,160.00
+sub-extend-006,Extended Services,rg-extend-monitoring,loganalytics-ext,Microsoft.OperationalInsights/workspaces,eastus,NDF,PerGB2018,1 GB,150,2.30,345.00
+sub-extend-006,Extended Services,rg-extend-security,keyvault-ext-main,Microsoft.KeyVault/vaults,eastus,NDF,Standard,1 Month,1,5.00,5.00
+sub-extend-006,Extended Services,rg-extend-security,keyvault-ext-sec,Microsoft.KeyVault/vaults,eastus,NDF,Standard,1 Month,1,5.00,5.00
+sub-extend-006,Extended Services,rg-extend-messaging,servicebus-ext,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,50,1.00,50.00
+sub-extend-006,Extended Services,rg-extend-messaging,queue-ext-01,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,30,1.00,30.00
+sub-extend-006,Extended Services,rg-extend-messaging,queue-ext-02,Microsoft.ServiceBus/namespaces,eastus,NDF,Standard,1 Million Ops,20,1.00,20.00
+sub-extend-006,Extended Services,rg-extend-network,vnet-ext,Microsoft.Network/virtualNetworks,eastus,NDF,NDF,N/A,0,0.00,0.00
+sub-extend-006,Extended Services,rg-extend-network,nsg-ext-main,Microsoft.Network/networkSecurityGroups,eastus,NDF,NDF,1 NSG,1,0.50,0.50
+sub-extend-006,Extended Services,rg-extend-network,nsg-ext-db,Microsoft.Network/networkSecurityGroups,eastus,NDF,NDF,1 NSG,1,0.50,0.50
+sub-extend-006,Extended Services,rg-extend-network,pip-ext-01,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-extend-006,Extended Services,rg-extend-network,pip-ext-02,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-extend-006,Extended Services,rg-extend-network,pip-ext-03,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-extend-006,Extended Services,rg-extend-network,pip-ext-04,Microsoft.Network/publicIPAddresses,eastus,NDF,NDF,1 IP/Month,1,2.50,2.50
+sub-extend-006,Extended Services,rg-extend-network,appgateway-ext,Microsoft.Network/applicationGateways,eastus,NDF,Standard,1 Hour,730,0.25,182.50
+sub-extend-006,Extended Services,rg-extend-network,cdn-ext,Microsoft.Cdn/profiles,eastus,NDF,Standard,1 Month,1,0.085,2.55
+sub-extend-006,Extended Services,rg-extend-network,loadbalancer-ext,Microsoft.Network/loadBalancers,eastus,NDF,Standard,1 LB/Month,1,16.00,16.00
+sub-extend-006,Extended Services,rg-extend-compute-func,function-processor,Microsoft.Web/sites,eastus,NDF,Dynamic,1 Million Executions,10,0.20,2.00
+sub-extend-006,Extended Services,rg-extend-compute-func,function-scheduler,Microsoft.Web/sites,eastus,NDF,Dynamic,1 Million Executions,5,0.20,1.00
+sub-extend-006,Extended Services,rg-extend-compute-func,function-webhook,Microsoft.Web/sites,eastus,NDF,Dynamic,1 Million Executions,3,0.20,0.60

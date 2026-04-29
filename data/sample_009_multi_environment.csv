@@ -1,0 +1,22 @@
+subscription_id,subscription_name,resource_group,resource_name,resource_type,location,sku,size,unit,quantity,unit_price_usd,estimated_cost_usd
+sub-multienv-dev,Development Multi-Env,rg-dev-team-a,vm-dev-a-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-multienv-dev,Development Multi-Env,rg-dev-team-a,vm-dev-a-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-multienv-dev,Development Multi-Env,rg-dev-team-b,vm-dev-b-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_B2s,1 Hour,730,0.0416,30.37
+sub-multienv-dev,Development Multi-Env,rg-dev-storage,stdev,Microsoft.Storage/storageAccounts,eastus,Standard_LRS,NDF,1 GB/Month,200,0.018,3.60
+sub-multienv-dev,Development Multi-Env,rg-dev-database,sqlserver-dev,Microsoft.Sql/servers/databases,eastus,Standard,NDF,1 Hour,730,0.10,73.00
+sub-multienv-staging,Staging Multi-Env,rg-stg-compute,vm-stg-01,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-multienv-staging,Staging Multi-Env,rg-stg-compute,vm-stg-02,Microsoft.Compute/virtualMachines,eastus,NDF,Standard_D2s_v3,1 Hour,730,0.096,70.08
+sub-multienv-staging,Staging Multi-Env,rg-stg-storage,ststg,Microsoft.Storage/storageAccounts,eastus,Standard_GRS,NDF,1 GB/Month,500,0.036,18.00
+sub-multienv-staging,Staging Multi-Env,rg-stg-database,sqlserver-stg,Microsoft.Sql/servers/databases,eastus,Standard,NDF,1 Hour,730,0.10,73.00
+sub-multienv-staging,Staging Multi-Env,rg-stg-web,asp-stg,Microsoft.Web/serverFarms,eastus,NDF,S1,1 Hour,730,0.064,46.72
+sub-multienv-prod,Production Multi-Env,rg-prod-web-team,vm-prod-web-01,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-multienv-prod,Production Multi-Env,rg-prod-web-team,vm-prod-web-02,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-multienv-prod,Production Multi-Env,rg-prod-web-team,vm-prod-web-03,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_D4s_v3,1 Hour,730,0.211,154.03
+sub-multienv-prod,Production Multi-Env,rg-prod-api-team,vm-prod-api-01,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-multienv-prod,Production Multi-Env,rg-prod-api-team,vm-prod-api-02,Microsoft.Compute/virtualMachines,westeurope,NDF,Standard_E4s_v3,1 Hour,730,0.264,192.72
+sub-multienv-prod,Production Multi-Env,rg-prod-storage,stprod,Microsoft.Storage/storageAccounts,westeurope,Premium_LRS,NDF,1 GB/Month,3000,0.17,510.00
+sub-multienv-prod,Production Multi-Env,rg-prod-database,sqlserver-prod,Microsoft.Sql/servers/databases,westeurope,GeneralPurpose,NDF,1 Hour,730,0.40,292.00
+sub-multienv-prod,Production Multi-Env,rg-prod-database,cosmosdb-prod,Microsoft.DocumentDB/databaseAccounts,westeurope,NDF,Multi-region,1 Hour,730,0.72,525.60
+sub-multienv-prod,Production Multi-Env,rg-prod-web,asp-prod-main,Microsoft.Web/serverFarms,westeurope,NDF,P2v2,1 Hour,730,0.168,122.64
+sub-multienv-prod,Production Multi-Env,rg-prod-web,asp-prod-api,Microsoft.Web/serverFarms,westeurope,NDF,P2v2,1 Hour,730,0.168,122.64
+sub-multienv-prod,Production Multi-Env,rg-prod-insights,appinsights-prod,Microsoft.Insights/components,westeurope,NDF,Enterprise,1 GB,300,2.00,600.00
