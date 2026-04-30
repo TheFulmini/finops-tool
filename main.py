@@ -33,7 +33,7 @@ import os
 from datetime import datetime
 
 from core.console import header, success, error, info, dim, highlight
-from core import extractor, pricer, exporter, dashboard
+from core import extractor, pricer, exporter, dashboard, ai_advisor
 
 
 # ── Provider registry ──────────────────────────────────────
@@ -272,6 +272,26 @@ def main() -> None:
         dashboard.generate(args.output, args.dashboard)
 
     success("[MAIN] All done.\n")
+
+    # # main.py additions
+    # if not args.no_ai:
+    #     from core.ai_advisor import FinOpsAdvisor
+
+    #     advisor = FinOpsAdvisor()
+    #     recommendations = advisor.analyze_costs(priced_data)
+
+    #     # Export recommendations to separate file
+    #     exporter.export_recommendations(
+    #         recommendations, 
+    #         f"{args.output.replace('.csv', '_recommendations.json')}"
+    #     )
+    
+    # # Add recommendations tab to Excel dashboard
+    # if args.dashboard:
+    #     exporter.add_recommendations_to_dashboard(
+    #         args.dashboard, 
+    #         recommendations
+    #     )
 
 
 # ── Entry point ────────────────────────────────────────────
