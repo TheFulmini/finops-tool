@@ -32,7 +32,7 @@ import sys
 import os
 from datetime import datetime
 
-from core.console import header, success, error, info, dim, highlight
+from core.console import header, success, error, info, dim, highlight, warn
 from core import extractor, pricer, exporter, dashboard, ai_advisor
 
 
