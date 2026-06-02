@@ -21,3 +21,10 @@ openpyxl
 
 # Terminal colors (cross-platform: works on Windows, macOS, Linux)
 colorama
+
+# use the Anthropic library
+anthropic
+
+# testing libraries
+pytest
+# unittest.mock
