@@ -23,9 +23,15 @@
 
 import pandas as pd
 import os
+import logging
 from typing import List, Dict, Any
 
 from core.console import header, success, warn, error, info, dim, highlight, item
+
+logger = logging.getLogger(__name__)
+
+# Minimum required columns for valid resource data
+REQUIRED_COLUMNS = {"resource_name", "resource_type", "location"}
 
 
 # ── Column schema ──────────────────────────────────────────
@@ -121,7 +127,7 @@ def import_csv(input_path: str) -> List[Dict[str, Any]]:
         List of resource dicts matching the extractor output format.
 
     Raises:
-        SystemExit: If the file cannot be read or is empty.
+        SystemExit: If the file cannot be read, is empty, or is missing required columns.
     """
     if not os.path.exists(input_path):
         error(f"[IMPORT] File not found: {input_path}")
@@ -136,8 +142,16 @@ def import_csv(input_path: str) -> List[Dict[str, Any]]:
             warn(f"[IMPORT] The file {input_path} is empty.")
             raise SystemExit(1)
 
+        # ─── Validate required columns ─────────────────────
+        missing_columns = REQUIRED_COLUMNS - set(df.columns)
+        if missing_columns:
+            error(f"[IMPORT] CSV is missing required columns: {missing_columns}")
+            error(f"[IMPORT] Found columns: {list(df.columns)}")
+            raise SystemExit(1)
+
         header(f"[IMPORT] Loaded {len(df)} rows from: {input_path}")
         dim(f"[IMPORT] Columns found: {list(df.columns)}\n")
+        logger.info(f"CSV schema validation passed: all required columns present")
 
         # Add any missing canonical columns
         _fill_missing_columns(df)

@@ -25,9 +25,9 @@ def enrich(
     """
     Add pricing columns to each resource dict.
 
-    For each resource, calls provider.get_price() and merges
-    the result into the resource dict in-place. Missing or
-    failed pricing lookups are filled with safe zero values.
+    For each resource, calls provider.get_price() and creates a new enriched
+    dict with pricing data. Missing or failed pricing lookups are filled with
+    safe zero values. Returns a new list; does not modify input in-place.
 
     Args:
         resources: List of resource dicts from extractor or CSV import.
@@ -36,7 +36,7 @@ def enrich(
                    provider instance is still needed for dispatch.
 
     Returns:
-        The same list of dicts, each now containing these additional keys:
+        A new list of dicts, each containing original keys plus pricing keys:
             unit               — e.g. "1 Hour", "1 GB/Month"
             quantity           — estimated units consumed per month
             unit_price_usd     — retail price per unit in USD
@@ -45,6 +45,7 @@ def enrich(
     total   = len(resources)
     priced  = 0
     skipped = 0
+    enriched_resources = []
 
     header(f"[PRICER] Enriching {total} resource(s) with pricing data...")
 
@@ -59,25 +60,29 @@ def enrich(
         try:
             price_data = provider.get_price(resource)
 
-            # Merge pricing fields into the resource dict.
-            # Use "NDF" for the unit string if the API returned nothing.
-            resource["unit"]               = price_data.get("unit", "NDF") or "NDF"
-            resource["quantity"]           = price_data.get("quantity", 0)
-            resource["unit_price_usd"]     = price_data.get("unit_price_usd", 0.0)
-            resource["estimated_cost_usd"] = price_data.get("estimated_cost_usd", 0.0)
+            # Create a new dict with original data + pricing fields.
+            # This avoids modifying the input and prevents race conditions.
+            enriched = resource.copy()
+            enriched["unit"]               = price_data.get("unit", "NDF") or "NDF"
+            enriched["quantity"]           = price_data.get("quantity", 0)
+            enriched["unit_price_usd"]     = price_data.get("unit_price_usd", 0.0)
+            enriched["estimated_cost_usd"] = price_data.get("estimated_cost_usd", 0.0)
 
+            enriched_resources.append(enriched)
             priced += 1
 
         except Exception as e:
             # Never let a single pricing failure stop the whole run.
             # Log the error and mark pricing fields as NDF.
             warn(f"  [WARN] Pricing failed for {rname}: {e}")
-            resource["unit"]               = "NDF"
-            resource["quantity"]           = 0
-            resource["unit_price_usd"]     = 0.0
-            resource["estimated_cost_usd"] = 0.0
+            enriched = resource.copy()
+            enriched["unit"]               = "NDF"
+            enriched["quantity"]           = 0
+            enriched["unit_price_usd"]     = 0.0
+            enriched["estimated_cost_usd"] = 0.0
+            enriched_resources.append(enriched)
             skipped += 1
 
     success_msg = f"\n[PRICER] Done. Priced: {priced}  |  Errors: {skipped}\n"
     success(success_msg) if skipped == 0 else warn(success_msg)
-    return resources
+    return enriched_resources

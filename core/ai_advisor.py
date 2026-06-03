@@ -1,9 +1,12 @@
 # core/ai_advisor.py
 import anthropic
 import json
+import logging
 from typing import List, Dict, Optional
 from datetime import datetime
 import os
+
+logger = logging.getLogger(__name__)
 
 class FinOpsAdvisor:
     def __init__(self):
@@ -24,13 +27,15 @@ class FinOpsAdvisor:
         # Prepare context for Claude
         context = self._prepare_context(cost_data)
 
-        # Call Claude API
-        message = self.client.messages.create(
-            model="claude-sonnet-4-20250514",
-            max_tokens=4096,
-            messages=[{
-                "role": "user",
-                "content": f"""You are a FinOps expert analyzing Azure infrastructure costs.
+        # Call Claude API with timeout and retry safety
+        try:
+            message = self.client.messages.create(
+                model="claude-sonnet-4-20250514",
+                max_tokens=4096,
+                timeout=60,
+                messages=[{
+                    "role": "user",
+                    "content": f"""You are a FinOps expert analyzing Azure infrastructure costs.
 
 Given this cost data:
 {context}
@@ -46,8 +51,17 @@ For each recommendation include:
 6. Priority (Quick Win/Strategic/Long-term)
 
 Format as JSON array with keys: resource, current_monthly_cost, estimated_savings, savings_percentage, implementation_steps, business_risk, priority, action_items."""
-            }]
-        )
+                }]
+            )
+        except anthropic.APIError as e:
+            logger.error(f"Claude API call failed: {str(e)}")
+            return {
+                "success": False,
+                "recommendations": [],
+                "error": f"Claude API error: {str(e)}",
+                "recommendation_count": 0,
+                "total_potential_savings": 0
+            }
 
         return self._parse_recommendations(message.content)
 
@@ -67,9 +81,19 @@ Format as JSON array with keys: resource, current_monthly_cost, estimated_saving
         if not cost_data:
             return "No cost data available for analysis."
 
+        # ─── Validate and warn on missing fields ───────────
+
+        missing_cost_count = sum(1 for r in cost_data if "estimated_cost_usd" not in r)
+        missing_type_count = sum(1 for r in cost_data if "resource_type" not in r)
+
+        if missing_cost_count > 0:
+            logger.warning(f"Found {missing_cost_count} resources missing 'estimated_cost_usd' field")
+        if missing_type_count > 0:
+            logger.warning(f"Found {missing_type_count} resources missing 'resource_type' field")
+
         # ─── Calculate aggregates ───────────────────────────
 
-        total_cost = sum(r.get("estimated_cost_usd", 0) for r in cost_data)
+        total_cost = sum(r.get("estimated_cost_usd", 0) for r in cost_data if isinstance(r.get("estimated_cost_usd"), (int, float)))
 
         # Cost by resource type
         cost_by_type = {}
@@ -214,14 +238,59 @@ Cost by Resource Type (Top 5):
 
             validated_recommendations = []
             total_savings = 0
+            required_fields = {"resource", "current_monthly_cost", "estimated_savings", "business_risk", "priority"}
 
-            for rec in recommendations:
+            for idx, rec in enumerate(recommendations):
+                # Check for required fields
+                missing_fields = required_fields - set(rec.keys())
+                if missing_fields:
+                    logger.warning(
+                        f"Recommendation {idx} missing required fields: {missing_fields}. Skipping: {rec}"
+                    )
+                    continue
+
+                # Validate and coerce numeric fields
+                try:
+                    current_cost = float(rec.get("current_monthly_cost", 0))
+                except (ValueError, TypeError):
+                    logger.error(
+                        f"Recommendation {idx} has non-numeric 'current_monthly_cost': "
+                        f"{rec.get('current_monthly_cost')}. Skipping."
+                    )
+                    continue
+
+                try:
+                    estimated_savings = float(rec.get("estimated_savings", 0))
+                except (ValueError, TypeError):
+                    logger.error(
+                        f"Recommendation {idx} has non-numeric 'estimated_savings': "
+                        f"{rec.get('estimated_savings')}. Skipping."
+                    )
+                    continue
+
+                try:
+                    savings_percentage = float(rec.get("savings_percentage", 0))
+                except (ValueError, TypeError):
+                    logger.warning(
+                        f"Recommendation {idx} has non-numeric 'savings_percentage': "
+                        f"{rec.get('savings_percentage')}. Using 0."
+                    )
+                    savings_percentage = 0
+
+                # Validate implementation_steps is a list
+                impl_steps = rec.get("implementation_steps", [])
+                if not isinstance(impl_steps, list):
+                    logger.warning(
+                        f"Recommendation {idx} has non-list 'implementation_steps'. Converting to list."
+                    )
+                    impl_steps = [str(impl_steps)] if impl_steps else []
+
                 validated_rec = {
                     "resource": rec.get("resource", "Unknown"),
-                    "current_cost": float(rec.get("current_monthly_cost", 0)),
-                    "estimated_savings": float(rec.get("estimated_savings", 0)),
-                    "savings_percentage": float(rec.get("savings_percentage", 0)),
-                    "implementation_steps": rec.get("implementation_steps", []),
+                    "current_cost": current_cost,
+                    "estimated_savings": estimated_savings,
+                    "savings_percentage": savings_percentage,
+                    "implementation_steps": impl_steps,
                     "business_risk": rec.get("business_risk", "Medium"),
                     "priority": rec.get("priority", "Medium"),
                     "action_items": rec.get("action_items", []),
@@ -229,7 +298,7 @@ Cost by Resource Type (Top 5):
                 }
 
                 validated_recommendations.append(validated_rec)
-                total_savings += validated_rec["estimated_savings"]
+                total_savings += estimated_savings
 
             # ─── Build response ────────────────────────────
 
@@ -264,31 +333,34 @@ Cost by Resource Type (Top 5):
 
     def _extract_json(self, text: str) -> Optional[str]:
         """
-        Extracts JSON array from text response.
+        Extracts JSON array from text response using proper JSON parsing.
 
-        Finds [ and matching ] to extract JSON array.
-        Handles nested objects and arrays.
+        Attempts to find and validate JSON arrays by iterating from the first '['
+        and trying to parse progressively longer substrings. This correctly handles
+        escaped characters and brackets within string values.
 
         Args:
             text: Raw response text from Claude
 
         Returns:
-            JSON array string or None if not found
+            Valid JSON array string or None if not found or invalid
         """
         start = text.find("[")
         if start == -1:
+            logger.debug("No '[' found in Claude response")
             return None
 
-        # Find matching closing bracket
-        bracket_count = 0
-        for i in range(start, len(text)):
-            if text[i] == "[":
-                bracket_count += 1
-            elif text[i] == "]":
-                bracket_count -= 1
-                if bracket_count == 0:
-                    return text[start:i+1]
+        for end in range(start + 1, len(text)):
+            candidate = text[start:end + 1]
+            try:
+                parsed = json.loads(candidate)
+                # Verify it's actually an array
+                if isinstance(parsed, list):
+                    return candidate
+            except json.JSONDecodeError:
+                continue
 
+        logger.debug("Could not find valid JSON array in Claude response")
         return None
 
     def _generate_summary(self, recommendations: List[Dict], total_savings: float) -> str:
