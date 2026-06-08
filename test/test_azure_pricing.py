@@ -308,17 +308,19 @@ class TestGetPrice:
             "size": "Standard_D2s_v3",
             "location": "eastus",
         }
-        
-        with patch("providers.azure.pricing._price_virtual_machine") as mock_handler:
-            mock_handler.return_value = {
-                "unit": "1 Hour",
-                "quantity": 730.0,
-                "unit_price_usd": 0.096,
-                "estimated_cost_usd": 70.08,
-            }
-            
+        mock_handler = MagicMock(return_value={
+            "unit": "1 Hour",
+            "quantity": 730.0,
+            "unit_price_usd": 0.096,
+            "estimated_cost_usd": 70.08,
+        })
+
+        # Regression: PRICE_HANDLERS stores function objects at import time;
+        # patching the module attribute alone does not affect the dict.
+        # Use patch.dict to replace the dict entry directly.
+        with patch.dict(pricing.PRICE_HANDLERS, {"microsoft.compute/virtualmachines": mock_handler}):
             result = pricing.get_price(resource)
-        
+
         mock_handler.assert_called_once()
         assert result["unit_price_usd"] == 0.096
 
@@ -340,13 +342,11 @@ class TestGetPrice:
             "size": "Standard_D2s_v3",
             "location": "eastus",
         }
-        
-        with patch("providers.azure.pricing._price_virtual_machine") as mock_handler:
-            mock_handler.return_value = {"unit_price_usd": 0.1, "estimated_cost_usd": 73.0}
-            
+        mock_handler = MagicMock(return_value={"unit_price_usd": 0.1, "estimated_cost_usd": 73.0})
+
+        with patch.dict(pricing.PRICE_HANDLERS, {"microsoft.compute/virtualmachines": mock_handler}):
             result = pricing.get_price(resource)
-        
-        # Should still find and call the VM handler
+
         mock_handler.assert_called_once()
 
 
