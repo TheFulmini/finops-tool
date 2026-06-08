@@ -36,7 +36,8 @@ class TestIsNestedType:
         nested_types = [
             "Microsoft.Sql/servers/databases",
             "Microsoft.Sql/servers/elasticPools",
-            "Microsoft.Authorization/roleAssignments",
+            # Microsoft.Authorization/roleAssignments has only 2 path segments
+            # (Provider/Type) — it is a top-level resource, not nested.
             "Microsoft.Network/virtualNetworks/subnets",
         ]
         
