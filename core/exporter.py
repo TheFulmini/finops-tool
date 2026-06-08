@@ -135,8 +135,14 @@ def import_csv(input_path: str) -> List[Dict[str, Any]]:
 
     try:
         # Read all values as strings initially — pandas type inference
-        # can silently corrupt IDs and version strings
-        df = pd.read_csv(input_path, dtype=str, encoding="utf-8-sig")
+        # can silently corrupt IDs and version strings.
+        # pd.read_csv raises EmptyDataError for a completely empty file
+        # (no headers at all) before we reach the df.empty guard below.
+        try:
+            df = pd.read_csv(input_path, dtype=str, encoding="utf-8-sig")
+        except pd.errors.EmptyDataError:
+            warn(f"[IMPORT] The file {input_path} is empty.")
+            raise SystemExit(1)
 
         if df.empty:
             warn(f"[IMPORT] The file {input_path} is empty.")
