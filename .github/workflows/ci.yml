@@ -13,7 +13,9 @@ permissions:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  # Only cancel superseded PR runs. A push to main should always be allowed to
+  # finish, so main always has a complete run recorded for that commit.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   test:
@@ -22,16 +24,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # The repository carries tracked __pycache__ for both 3.12 and 3.14,
-        # so 3.12 is the developer's floor. Both matrix entries are verified
-        # locally: 78 tests pass on 3.12.13 and on 3.13.5.
+        # 3.12 is the effective floor: pinned pandas 3.0.6 requires >=3.11 and
+        # pinned numpy 2.5.3 requires >=3.12, so requirements.lock cannot
+        # install on older interpreters. (The pre-change tree carried tracked
+        # __pycache__ tagged cpython-312 and cpython-314, which is why 3.12 was
+        # picked as the lower bound; this change untracks those .pyc files, so
+        # that signal no longer exists at HEAD.) Both entries verified locally:
+        # the suite passes on 3.12.13 and on 3.13.5. The test count is
+        # deliberately not hardcoded here - it changes whenever tests are added,
+        # and a stale number in a comment is worse than none.
         python-version: ["3.12", "3.13"]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
@@ -52,15 +60,23 @@ jobs:
       - name: Run test suite
         run: python -m pytest -q
 
+  # DO NOT fold this job into the `test` job.
+  #
+  # Its check name -- "smoke test (bundled sample data, no Azure credentials)" --
+  # is a REQUIRED status check in the branch protection rule on `main`. Merging
+  # it into `test` would save one runner and one cold install, but it would also
+  # delete this check context entirely, and a required check that never reports
+  # blocks every future PR from ever merging. If you do consolidate these jobs,
+  # update the branch protection rule in the same change.
   smoke:
     name: smoke test (bundled sample data, no Azure credentials)
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.13"
           cache: pip

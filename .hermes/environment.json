@@ -15,7 +15,7 @@
     "readinessPath": "/",
     "evidence": [
       "requirements.lock pins all 48 transitive dependencies",
-      "78 tests pass on Python 3.12.13 and 3.13.5",
+      "the test suite passes on Python 3.12.13 and 3.13.5",
       "smoke run verified: python main.py --provider azure --input data/sample_data.csv --output /tmp/costs.csv --no-pricing exits 0 and writes 3783 bytes",
       "no Azure credentials or network access required for the test suite or the smoke run",
       "test command is pytest, NOT `python -m unittest discover` (hermes verify auto-detection guessed wrong here)"

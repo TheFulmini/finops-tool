@@ -43,5 +43,5 @@ pytest==9.1.1
 #     pip install -r requirements.lock
 #
 # requirements.lock is the full freeze that CI installs, verified green on
-# Python 3.12.13 and 3.13.5 (78 tests passing on both).
+# Python 3.12.13 and 3.13.5.
 # ---------------------------------------------------------------------------
