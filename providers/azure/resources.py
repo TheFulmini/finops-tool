@@ -18,7 +18,7 @@
 
 from typing import List, Dict, Any
 
-from azure.mgmt.resource import ResourceManagementClient
+from azure.mgmt.resource.resources import ResourceManagementClient
 from azure.mgmt.subscription import SubscriptionClient
 from azure.core.exceptions import HttpResponseError
 

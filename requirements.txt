@@ -1,30 +1,47 @@
 # Azure SDK - Authentication (supports az login, Service Principal, Managed Identity)
-azure-identity
+azure-identity==1.25.3
 
 # Azure SDK - Resource management (list resources across subscriptions)
-azure-mgmt-resource
+azure-mgmt-resource==26.0.0
 
 # Azure SDK - Subscription management (discover all accessible subscriptions)
-azure-mgmt-subscription
+azure-mgmt-subscription==3.1.1
 
 # HTTP client - used to call the Azure Retail Prices REST API
-requests
+requests==2.34.2
 
 # YAML parser - used to read the resource type config file
-pyyaml
+pyyaml==6.0.3
 
 # Data manipulation and CSV handling
-pandas
+pandas==3.0.6
 
 # Excel export support (used later for dashboard)
-openpyxl
+openpyxl==3.1.5
 
 # Terminal colors (cross-platform: works on Windows, macOS, Linux)
-colorama
+colorama==0.4.6
 
 # use the Anthropic library
-anthropic
+anthropic==1.9.0
 
 # testing libraries
-pytest
+pytest==9.1.1
 # unittest.mock
+
+# ---------------------------------------------------------------------------
+# NOTE ON PINNING (added in Milestone 0)
+#
+# These were previously unpinned. An unpinned install silently resolved
+# azure-mgmt-resource to 26.0.0, which no longer exports
+# ResourceManagementClient from the `azure.mgmt.resource` top level -- so the
+# test suite could not even be collected on a clean machine.
+#
+# Direct dependencies are pinned here. For an exactly reproducible install
+# (including transitive dependencies), use requirements.lock instead:
+#
+#     pip install -r requirements.lock
+#
+# requirements.lock is the full freeze that CI installs, verified green on
+# Python 3.12.13 and 3.13.5.
+# ---------------------------------------------------------------------------
