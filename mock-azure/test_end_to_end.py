@@ -91,21 +91,25 @@ def test_confirmed_end_to_end_unpriced_estate_share(run_cli, tmp_path, monkeypat
     assert len(unsupported) >= 100, "expected the unpriced types to dominate"
 
 
-def test_confirmed_end_to_end_fabricated_sql_rows_carry_cost(run_cli, tmp_path, monkeypatch):
+def test_guard_end_to_end_sql_rows_are_not_fabricated(run_cli, tmp_path, monkeypatch):
     """
-    DEFECT (impact quantified): the fabricated SQL duplicates are not merely
-    extra rows — they carry cost, so the report overstates SQL spend.
+    FIXED (impact quantified): the duplicated SQL rows used to carry cost, so the
+    report overstated SQL spend by exactly 100 %. Each database now appears once,
+    under the server that owns it.
     """
     H.install(monkeypatch)
     out = tmp_path / "priced.csv"
     run_cli(["--provider", "azure", "--input", str(H.NORMALIZED_CSV), "--output", str(out)])
     rows = H.read_rows(out)
     sql = [r for r in rows if r["resource_type"] == "Microsoft.Sql/servers/databases"]
-    assert len(sql) == 6
-    fabricated = [r for r in sql if r["resource_name"] in
-                  ("sql-prod-ecom/dwdb", "sql-prod-report/maindb", "sql-prod-report/auditdb")]
-    assert len(fabricated) == 3
-    assert sum(float(r["estimated_cost_usd"]) for r in fabricated) > 0
+
+    names = sorted(r["resource_name"] for r in sql)
+    assert names == ["sql-prod-ecom/auditdb", "sql-prod-ecom/maindb",
+                     "sql-prod-report/dwdb"], names
+
+    # and the reported SQL total is the real one
+    total = sum(float(r["estimated_cost_usd"]) for r in sql)
+    assert total == pytest.approx((2 * 0.10 + 0.275) * 730, rel=1e-6), total
 
 
 def test_guard_end_to_end_no_pricing_mode(run_cli, tmp_path):

@@ -93,9 +93,24 @@ def tags(env, owner, **extra):
 
 # ── ARM resource builder ───────────────────────────────────────────────────
 def arm(sub, mg, rg, name, rtype, location, sku_name="", sku_tier="", vm_size="",
-        tg=None, kind=None, zones=None, identity=None, props=None):
+        tg=None, kind=None, zones=None, identity=None, props=None, parent_name=None):
+    # A nested type is addressed through its parent in the ARM id path, so the
+    # parent segment sits between the parent type and the child type:
+    #
+    #   type = Microsoft.Sql/servers/databases, parent_name = sql-prod-ecom,
+    #   name = maindb
+    #     -> /providers/Microsoft.Sql/servers/sql-prod-ecom/databases/maindb
+    #
+    # Flattening it to /providers/Microsoft.Sql/servers/databases/maindb would
+    # produce an id that does not exist in Azure and that no parent id prefixes.
+    if parent_name and rtype.count("/") >= 2:
+        namespace, parent_segment, *rest = rtype.split("/")
+        path = f"{namespace}/{parent_segment}/{parent_name}/{'/'.join(rest)}"
+    else:
+        path = rtype
+
     r = {
-        "id": f"/subscriptions/{sub}/resourceGroups/{rg}/providers/{rtype}/{name}",
+        "id": f"/subscriptions/{sub}/resourceGroups/{rg}/providers/{path}/{name}",
         "name": name,
         "type": rtype,
         "location": location,
@@ -198,20 +213,30 @@ HAND_CRAFTED[SUB_A]["Microsoft.Sql/servers"] = [
     arm(SUB_A, "Workloads", "rg-prod-sql", "sql-prod-report", "Microsoft.Sql/servers", "eastus",
         tg=tags("prod", "bi-team@contoso.example")),
 ]
+# Ground truth for nested resources. Each database is listed under the server
+# that really owns it, as (name, sku_name, sku_tier).
 SQL_GROUND_TRUTH = {
     "rg-prod-sql": {
-        "sql-prod-ecom": [
-            arm(SUB_A, "Workloads", "rg-prod-sql", "maindb", "Microsoft.Sql/servers/databases", "eastus",
-                sku_name="Standard", sku_tier="Standard"),
-            arm(SUB_A, "Workloads", "rg-prod-sql", "auditdb", "Microsoft.Sql/servers/databases", "eastus",
-                sku_name="Standard", sku_tier="Standard"),
-        ],
-        "sql-prod-report": [
-            arm(SUB_A, "Workloads", "rg-prod-sql", "dwdb", "Microsoft.Sql/servers/databases", "eastus",
-                sku_name="Hyperscale", sku_tier="Hyperscale"),
-        ],
+        "sql-prod-ecom":   [("maindb", "Standard", "Standard"),
+                            ("auditdb", "Standard", "Standard")],
+        "sql-prod-report": [("dwdb", "Hyperscale", "Hyperscale")],
     }
 }
+
+NESTED_TYPE = "Microsoft.Sql/servers/databases"
+
+
+def sql_databases(sub, rg):
+    """Yield (owning_server_name, database_resource) for every database in `rg`.
+
+    The returned resource carries a real ARM id, with the server segment in the
+    path, so a parent-id prefix match is possible.
+    """
+    for server, dbs in SQL_GROUND_TRUTH.get(rg, {}).items():
+        for name, sku_name, sku_tier in dbs:
+            yield server, arm(sub, "Workloads", rg, name, NESTED_TYPE, "eastus",
+                              sku_name=sku_name, sku_tier=sku_tier,
+                              parent_name=server)
 
 # ── SUB_B: degraded / missing-attribute cases ─────────────────────────────
 HAND_CRAFTED[SUB_B]["Microsoft.Compute/virtualMachines"] = [
@@ -488,11 +513,10 @@ for sub, name, state, mg in SUBSCRIPTIONS:
     RAW[sub] = raw_block
 
 # ── Nested types (SQL databases) — separate pass ──────────────────────────
-# Emulates the real (buggy) behaviour: for each parent, a RESOURCE-GROUP-scoped
-# query filtered by TYPE ONLY, then prefixed with the CURRENT parent's name.
-# With two SQL servers in one resource group, every server therefore sees the
-# other server's databases -> duplicated rows, mis-attributed to the wrong parent.
-NESTED_TYPE = "Microsoft.Sql/servers/databases"
+# The extractor enumerates children with a resource-group-scoped query filtered
+# by type, then attributes each child to the parent whose ARM id prefixes it.
+# The fixture is built the same way, so it reflects what a correct run produces:
+# every database once, under the server that actually owns it.
 
 for sub, name, state, mg in SUBSCRIPTIONS:
     if state != "Enabled":
@@ -500,28 +524,16 @@ for sub, name, state, mg in SUBSCRIPTIONS:
     parents = HAND_CRAFTED.get(sub, {}).get("Microsoft.Sql/servers", [])
     RAW.setdefault(sub, {})[NESTED_TYPE] = []
 
-    # The children that actually exist under these parents (each exactly once)
     seen_rgs = set()
     for parent in parents:
         prg = parent["resourceGroup"]
         if prg in seen_rgs:
             continue
         seen_rgs.add(prg)
-        if prg in SQL_GROUND_TRUTH:
-            for _srv, dbs in SQL_GROUND_TRUTH[prg].items():
-                for ch in dbs:
-                    RAW[sub][NESTED_TYPE].append(ch)
-
-    # Now emulate the real (buggy) extraction: per parent, an RG-scoped query
-    # filtered by TYPE ONLY, then prefixed with the CURRENT parent's name.
-    # With two servers in one resource group this yields the other's databases.
-    for parent in parents:
-        prg, pname = parent["resourceGroup"], parent["name"]
-        children = [c for c in RAW[sub][NESTED_TYPE]
-                    if c.get("resourceGroup") == prg]     # not scoped to the parent
-        for ch in children:
+        for server, ch in sql_databases(sub, prg):
+            RAW[sub][NESTED_TYPE].append(ch)
             sk, st = safe_sku(ch)
-            NORMALIZED.append((sub, name, prg, f"{pname}/{ch['name']}", NESTED_TYPE,
+            NORMALIZED.append((sub, name, prg, f"{server}/{ch['name']}", NESTED_TYPE,
                                ch.get("location") or parent.get("location") or "", sk, st))
             COUNTED[NESTED_TYPE] += 1
 

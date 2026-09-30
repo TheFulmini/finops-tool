@@ -29,12 +29,13 @@ SUB_H_DISABLED = "sub-13579bdf-8888-4e55-b166-000000000008"
 # Extraction correctness
 # ══════════════════════════════════════════════════════════════════════════
 
-def test_confirmed_nested_sql_duplication(monkeypatch):
+def test_guard_nested_sql_no_duplication(monkeypatch):
     """
-    DEFECT: two SQL servers in one resource group. _list_nested_resources()
-    queries children per RESOURCE GROUP filtered by type only, then prefixes
-    them with the CURRENT parent's name, so each server reports the other's
-    databases. 3 real databases become 6 rows.
+    FIXED: two SQL servers in one resource group used to make each server report
+    the other's databases, because children were queried per resource group
+    filtered by type only and then labelled with the current parent's name.
+    3 real databases became 6 rows, half of them non-existent. Children are now
+    attributed to the parent whose ARM id prefixes them.
     """
     import providers.azure.resources as az_res
     monkeypatch.setattr(az_res, "ResourceManagementClient", H.FakeResourceManagementClient)
@@ -43,21 +44,21 @@ def test_confirmed_nested_sql_duplication(monkeypatch):
                                 ["Microsoft.Sql/servers/databases"])
     names = sorted(r["resource_name"] for r in rows)
 
-    assert len(rows) == 6, f"expected the bug (6), got {len(rows)}"
-    assert len(set(names)) == 6                          # all distinct strings
-    # Ground truth is 3; the extra 3 are fabrications:
-    assert "sql-prod-ecom/dwdb" in names                 # ecom cannot own report's db
-    assert "sql-prod-report/maindb" in names             # report cannot own ecom's db
-    assert "sql-prod-report/auditdb" in names
-    real = {"sql-prod-ecom/maindb", "sql-prod-ecom/auditdb", "sql-prod-report/dwdb"}
-    assert real <= set(names)
-    assert len(set(names) - real) == 3, "expected exactly 3 fabricated rows"
+    assert names == ["sql-prod-ecom/auditdb",
+                     "sql-prod-ecom/maindb",
+                     "sql-prod-report/dwdb"], names
+    assert len(rows) == 3, f"ground truth is 3, got {len(rows)}"
+    # the fabrications are gone: neither server claims the other's database
+    assert "sql-prod-ecom/dwdb" not in names
+    assert "sql-prod-report/maindb" not in names
+    assert "sql-prod-report/auditdb" not in names
 
 
-def test_confirmed_nested_rows_double_count_cost(monkeypatch):
+def test_guard_nested_cost_is_not_double_counted(monkeypatch):
     """
-    DEFECT (impact): the duplicated SQL rows each carry a price, so the cost of
-    every database in a shared resource group is counted twice.
+    FIXED (impact): the duplicated rows each carried a price, so the cost of
+    every database in a shared resource group was counted twice. The SQL estate
+    total is now the true figure.
     """
     import providers.azure.resources as az_res
     import providers.azure.pricing as az_price
@@ -71,9 +72,63 @@ def test_confirmed_nested_rows_double_count_cost(monkeypatch):
 
     # 3 real databases: 2 x Standard (0.10/h) + 1 x Hyperscale (0.275/h), 730h
     true_total = (2 * 0.10 + 0.275) * 730
-    assert len(rows) == 6
-    assert total == pytest.approx(true_total * 2, rel=1e-6), \
-        f"duplicated cost is {total}, expected exactly 2x {true_total}"
+    assert len(rows) == 3
+    assert total == pytest.approx(true_total, rel=1e-6), \
+        f"expected {true_total}, got {total}"
+    assert total != pytest.approx(true_total * 2, rel=1e-6)
+
+
+def test_guard_owning_parent_requires_a_segment_boundary():
+    """
+    GUARD: attribution matches on whole path segments, so a sibling whose name
+    merely starts with another parent's name is not treated as its child.
+    """
+    from providers.azure.resources import _owning_parent
+
+    class P:
+        def __init__(self, name, rid):
+            self.name, self.id = name, rid
+
+    base = "/subscriptions/s/resourceGroups/rg/providers/Microsoft.Sql/servers"
+    ecom = P("sql-prod-ecom", f"{base}/sql-prod-ecom")
+    archive = P("sql-prod-ecom-archive", f"{base}/sql-prod-ecom-archive")
+
+    child = f"{base}/sql-prod-ecom/databases/maindb"
+    assert _owning_parent(child, [ecom, archive]) is ecom
+    # a database of the archive server must not match the shorter name
+    assert _owning_parent(f"{base}/sql-prod-ecom-archive/databases/d1",
+                          [ecom, archive]) is archive
+    # case-insensitive, as ARM ids are
+    assert _owning_parent(child.upper(), [ecom]) is ecom
+    # a child with no parent present is not invented
+    assert _owning_parent(f"{base}/other/databases/d1", [ecom, archive]) is None
+    assert _owning_parent("", [ecom]) is None
+
+
+def test_guard_one_child_query_per_resource_group(monkeypatch):
+    """
+    GUARD: children are fetched once per resource group, not once per parent.
+    Two servers sharing a group cost a single child query.
+    """
+    import providers.azure.resources as az_res
+    monkeypatch.setattr(az_res, "ResourceManagementClient", H.FakeResourceManagementClient)
+
+    calls = []
+    real = H.FakeResourceManagementClient.__init__
+
+    def spy(self, credential=None, subscription_id=None):
+        real(self, credential, subscription_id)
+        rg_list = self.resources.list_by_resource_group
+        self.resources.list_by_resource_group = lambda **kw: (
+            calls.append(kw.get("resource_group_name")), rg_list(**kw))[1]
+
+    monkeypatch.setattr(az_res, "ResourceManagementClient", type(
+        "SpyClient", (H.FakeResourceManagementClient,), {"__init__": spy}))
+
+    az_res.get_resources(object(), {"id": SUB_A, "name": "P"},
+                         ["Microsoft.Sql/servers/databases"])
+    # two parents in rg-prod-sql -> one child query for that group
+    assert calls.count("rg-prod-sql") == 1, calls
 
 
 def test_guard_single_parent_nested_extraction_correct(monkeypatch):
