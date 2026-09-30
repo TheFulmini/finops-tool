@@ -3,18 +3,19 @@
 **Target:** `TheFulmini/finops-tool` (`main → extractor → provider → pricer → exporter`)
 **Method:** offline. Synthetic Azure tenant, no credentials, no network, no real subscription.
 **Date:** 30 September 2026 · **Commit tested:** `f1ac76b` plus the fixes below
-**Suite:** 102 tests in 4 files — **102 passed** (78 functions, 24 of them parametrized)
+**Suite:** 103 tests in 4 files — **103 passed** (79 functions, 24 of them parametrized)
 
 ## Status of this report
 
-Three findings are **fixed in this pull request**, and the tests that used to
-reproduce them now assert the fixed behaviour:
+Four findings are **fixed**, and the tests that used to reproduce them now assert
+the fixed behaviour:
 
 | Finding | Section | Status |
 |---|---|---|
-| P0 — tool cannot start: `azure-mgmt-resource` import incompatible | §3 | **fixed** — one-line import change + version floor |
+| P0 — tool cannot start: `azure-mgmt-resource` import incompatible | §3 | **fixed** — import path corrected on `main` (PR #1), now guarded by this suite |
 | HIGH — CSV formula injection unmitigated | §4.1 | **fixed** — neutralised in `core/spreadsheet_safety.py` |
 | HIGH — the same strings become live Excel formulas in the dashboard | §4.2 | **fixed** — cells forced to a string type |
+| HIGH — nested SQL resources duplicated and mis-attributed | §5.1 | **fixed** — children attributed by ARM id prefix |
 
 Everything else in this report is **still open** and described as observed.
 
@@ -43,7 +44,7 @@ clean subprocesses, so it reflects what a real user gets.
 
 ### The mock tenant
 
-395 normalised rows · 8 subscriptions (7 enabled, 1 disabled) · 2 management groups ·
+392 normalised rows · 8 subscriptions (7 enabled, 1 disabled) · 2 management groups ·
 15 resource types · 16 regions · 607 price filters · 21 adversarial payloads.
 Deterministic: seed `20260930`, byte-identical on regeneration (verified by SHA-256).
 
@@ -54,21 +55,22 @@ Shared Services 51, Sandbox 39, Identity 36.
 
 ## 2. Headline results
 
-| Measure | Value |
-|---|---|
-| Tests | **100 passed / 0 failed** |
-| Blocker | **1 — the tool cannot start at all on a current install** |
-| Rows reporting **$0.00** | **175 of 395 (44.3 %)** |
-| `$0.00` rows actually flagged by the tool | **1** |
-| Est. monthly total produced | **$151,696.04** |
-| Share of that total from VMs alone | **95.9 %** (`$145,518.49`) |
-| Fabricated rows (SQL duplication) | 3 of 6, adding **$346.75/mo** that does not exist |
-| Injection payloads surviving to the on-disk CSV | **21 of 21** |
-| Live Excel formulas written into the .xlsx | **3** (`data_type='f'`) |
+| Measure | As found | Now |
+|---|---|---|
+| Tests | 100 passed / 0 failed | **103 passed / 0 failed** |
+| Blocker | the tool could not start at all on a current install | **fixed** |
+| Rows reporting **$0.00** | 175 of 395 (44.3 %) | **175 of 392 (44.6 %)** — open |
+| `$0.00` rows actually flagged by the tool | 1 | 1 — **open** |
+| Est. monthly total produced | $151,696.04 | **$151,349.29** |
+| Share of that total from VMs alone | 95.9 % | **96.1 %** (`$145,518.49`) |
+| Fabricated rows (nested SQL duplication) | 3 of 6, adding $346.75/mo that does not exist | **0 of 3** |
+| Injection payloads surviving to the on-disk CSV | 21 of 21 | **0** |
+| Live Excel formulas written into the .xlsx | 3 (`data_type='f'`) | **0** |
 
-Three findings account for most of the risk: the tool does not run on a fresh install;
-roughly half the estate is silently priced at zero; and untrusted strings reach Excel
-as executable content.
+As found, three findings accounted for most of the risk: the tool did not run on a
+fresh install; roughly half the estate was silently priced at zero; and untrusted
+strings reached Excel as executable content. The first and third are fixed — the
+priced-at-zero problem remains the largest open issue.
 
 ---
 
@@ -95,8 +97,8 @@ import raises `ImportError`, `main.py`'s registry catches it, sets
 install today gets 26.0.0 and the tool is dead on arrival. The advice printed to the
 operator is precisely the action that produces the broken state.
 
-**Evidence:** `test_environment.py::test_confirmed_sdk_import_incompatibility` (clean
-subprocess, no shim) and `::test_confirmed_cli_exits_unavailable_on_fresh_install`.
+**Evidence:** `test_environment.py::test_guard_sdk_import_works_on_a_fresh_install`
+(clean subprocess, no shim) and `::test_guard_cli_starts_and_completes_a_run`.
 
 **Fix — one line, verified sufficient:**
 
@@ -104,11 +106,15 @@ subprocess, no shim) and `::test_confirmed_cli_exits_unavailable_on_fresh_instal
 from azure.mgmt.resource.resources import ResourceManagementClient
 ```
 
-With only that change applied, `main.py` completes a full run and writes all 395 rows
-(verified against the real CLI, not a patched registry). A version floor
-(`azure-mgmt-resource>=26`) should accompany it.
+With only that change applied, `main.py` completes a full run and writes every row of
+the fixture (verified against the real CLI, not a patched registry). `main` now pins
+the SDK exactly (`azure-mgmt-resource==26.0.0` in `requirements.txt`, frozen in
+`requirements.lock`), so the layout cannot drift under the import unnoticed.
 
-*Every finding below this point was unreachable for a real user until this is fixed.*
+**Resolved on `main` in PR #1**, independently of this audit; the suite here guards it
+against regression.
+
+*Every finding below this point was unreachable for a real user until that landed.*
 
 ---
 
@@ -158,7 +164,7 @@ sheet=Raw Data  cell=D145  data_type='f'  =1+1+cmd|' /C calc'!A0
 CSV exporter would not close. Three further cells (`+`, `-`, `@`) are stored as text
 but convert to formulas if a user re-enters or edits them.
 
-**Evidence:** `test_security.py::test_confirmed_xlsx_formula_sink_via_dashboard`.
+**Evidence:** `test_security.py::test_guard_xlsx_never_stores_a_formula_from_an_input_csv`.
 
 **Fix:** in `dashboard.py`, set the cell value with `cell.data_type = "s"` (or
 `openpyxl.cell.cell.Cell` with an explicit string), and apply the same prefix rule.
@@ -199,8 +205,8 @@ application GUIDs into logs. *Evidence:* `::test_confirmed_auth_failure_echoes_r
 
 An arbitrary CSV that merely has the right column names is accepted as Azure data —
 no signature, no tenant check, no schema version. Fabricated cost data flows straight
-into a report. *Evidence:* `::test_confirmed_no_provenance_validation_on_input`,
-`::test_confirmed_input_columns_pass_through_to_output`.
+into a report. *Evidence:* `::test_confirmed_no_provenance_validation_on_input_csv`,
+`::test_confirmed_unknown_columns_pass_through_to_output`.
 
 ### 4.8 LOW — unconstrained paths and symlink-following output
 
@@ -212,7 +218,7 @@ the path is ever attacker-influenced. *Evidence:* `::test_confirmed_output_path_
 ### 4.9 What is fine
 
 No hardcoded credentials, tokens or connection strings anywhere in the source
-(`::test_guard_no_hardcoded_credentials`). `DefaultAzureCredential` is used correctly,
+(`::test_guard_no_hardcoded_credentials_in_source`). `DefaultAzureCredential` is used correctly,
 so there is no credential-handling bug — only the SDK import (3.1) breaks auth in
 practice. The `connectionString` in the mock's tags never reaches the output.
 
@@ -220,15 +226,15 @@ practice. The `connectionString` in the mock's tags never reaches the output.
 
 ## 5. Data-quality findings
 
-### 5.1 HIGH — nested SQL resources are duplicated *and* mis-attributed
+### 5.1 HIGH — nested SQL resources were duplicated *and* mis-attributed — **FIXED**
 
-`_list_nested_resources()` enumerates children with a **resource-group-scoped** query
-filtered by **type only**, then prefixes each result with the **current parent's** name.
-Two SQL servers sharing a resource group therefore each claim the other's databases.
+`_list_nested_resources()` enumerated children with a **resource-group-scoped** query
+filtered by **type only**, then prefixed each result with the **current parent's** name.
+Two SQL servers sharing a resource group therefore each claimed the other's databases.
 
-Ground truth vs. extraction for `rg-prod-sql`:
+Ground truth vs. the old extraction for `rg-prod-sql`:
 
-| Actually exists (3) | Extracted (6) |
+| Actually exists (3) | Was extracted (6) |
 |---|---|
 | `sql-prod-ecom/maindb` | ✔ correct |
 | `sql-prod-ecom/auditdb` | ✔ correct |
@@ -237,16 +243,30 @@ Ground truth vs. extraction for `rg-prod-sql`:
 | — | ✘ `sql-prod-report/maindb` — does not exist |
 | — | ✘ `sql-prod-report/auditdb` — does not exist |
 
-Cost impact: SQL reports **$693.50/mo** against a real **$346.75** — a 100 % overstatement,
-because each database is billed twice and attributed to the wrong server.
-*Evidence:* `::test_confirmed_nested_sql_duplication`, `::test_confirmed_nested_rows_double_count_cost`.
+Cost impact: SQL reported **$693.50/mo** against a real **$346.75** — a 100 %
+overstatement, because each database was billed twice and attributed to the wrong
+server. Estate total: **$151,696.04 → $151,349.29**, the difference being exactly the
+double-count.
 
-**Fix:** query children per parent (`resources.list_by_resource_group` with the parent
-in the filter, or `list` on the parent resource itself) instead of per resource group.
+**Fixed by** attributing each child to the parent whose ARM id prefixes the child's id
+(longest prefix, whole-segment boundary, case-insensitive). A child that matches no
+parent is warned about and dropped rather than hung off an arbitrary parent.
 
-### 5.2 HIGH — 44.3 % of the estate is priced at $0.00, and the warning says "1"
+**Correction to the original suggestion here:** the first version of this report
+suggested querying "with the parent in the filter". That is not possible — the generic
+list API cannot be scoped to a single parent, and an RG-scoped query filtered by type
+returns every resource of that type in the group. The child's own id is the only
+reliable statement of its parentage, so the id prefix is the fix.
 
-175 of 395 rows report `$0.00`: **135** because their type has no `PRICE_HANDLERS`
+*Evidence:* `test_data_quality.py::test_guard_nested_sql_no_duplication`,
+`::test_guard_nested_cost_is_not_double_counted`,
+`::test_guard_owning_parent_requires_a_segment_boundary`,
+`::test_guard_one_child_query_per_resource_group`,
+`test_end_to_end.py::test_guard_end_to_end_sql_rows_are_not_fabricated`.
+
+### 5.2 HIGH — 44.6 % of the estate is priced at $0.00, and the warning says "1"
+
+175 of 392 rows report `$0.00`: **135** because their type has no `PRICE_HANDLERS`
 entry (`unit="Unsupported type"`), **28** VNets (`unit="N/A (costs from peering/data
 transfer)"`), **1** genuine pricing failure. The summary's own note reads:
 
@@ -297,7 +317,7 @@ and the run still reports success. A pricing API change would degrade quietly in
 - **Storage:** hardcoded **100 GB** regardless of real usage. 53 rows. Every storage
   figure is an arbitrary constant × a per-GB rate.
 
-No row carries a measured usage figure: **100 % of the $151,696.04 is modelled, not
+No row carries a measured usage figure: **100 % of the $151,349.29 is modelled, not
 observed**, and nothing in the output says so.
 *Evidence:* `::test_confirmed_storage_quantity_is_hardcoded_placeholder`,
 `::test_confirmed_vm_hours_assumed_regardless_of_power_state`,
