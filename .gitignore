@@ -14,3 +14,11 @@ __pycache__/
 .env
 .env.*
 .gstack
+
+# Office temp/lock files (e.g. ~$dashboard.xlsx left behind by Excel)
+~$*
+
+# The sample dashboard is a documented example input (see README), so keep it
+# tracked despite the blanket *.xlsx rule above.
+!data/sample_dashboard.xlsx
+
