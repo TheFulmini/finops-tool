@@ -27,6 +27,7 @@ import logging
 from typing import List, Dict, Any
 
 from core.console import header, success, warn, error, info, dim, highlight, item
+from core.spreadsheet_safety import neutralise
 
 logger = logging.getLogger(__name__)
 
@@ -100,6 +101,16 @@ def export_csv(
     for col in ["unit_price_usd", "estimated_cost_usd"]:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0).round(4)
+
+    # Neutralise spreadsheet formula injection. Resource names, SKUs and any
+    # value carried through from an --input CSV are attacker-influenced, and a
+    # name like "=cmd|'/c calc'!A1" is executed when the file is opened in a
+    # spreadsheet. Numeric columns are already coerced above, so they cannot
+    # hold a formula-like string and are left alone.
+    for col in df.columns:
+        if pd.api.types.is_numeric_dtype(df[col]):
+            continue
+        df[col] = df[col].map(neutralise)
 
     try:
         # utf-8-sig adds a BOM so Excel opens the file with correct encoding

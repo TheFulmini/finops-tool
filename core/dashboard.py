@@ -27,6 +27,7 @@ from openpyxl.chart.series import DataPoint
 from openpyxl.worksheet.table import Table, TableStyleInfo
 
 from core.console import header, success, warn, info, dim
+from core.spreadsheet_safety import is_formula_like
 
 
 # ── Palette ────────────────────────────────────────────────
@@ -70,6 +71,20 @@ def _thick_bottom() -> Border:
 
 
 # ── Cell style helpers ─────────────────────────────────────
+
+def _write_cell_value(cell, value) -> None:
+    """Store `value` in `cell` in a way that can never be a formula.
+
+    openpyxl infers "this is a formula" from a leading '=' and emits an <f>
+    element, which Excel evaluates when the workbook is opened. Everything
+    written here comes from the input CSV, i.e. from the Azure estate, so a
+    formula-like string is stored as a plain string instead. The value itself
+    is preserved byte for byte — only its type changes.
+    """
+    cell.value = value
+    if is_formula_like(value):
+        cell.data_type = "s"
+
 
 def _style_header_cell(cell, text: str, font_size: int = 11) -> None:
     """Dark blue background, white bold text — used for column headers."""
@@ -116,7 +131,7 @@ def _style_kpi_value(cell, value, number_format: str = None) -> None:
 def _style_data_cell(cell, value, row_even: bool = True,
                      number_format: str = None, is_ndf: bool = False) -> None:
     """Standard data cell with alternating row shading."""
-    cell.value = value
+    _write_cell_value(cell, value)
 
     if is_ndf:
         # Highlight NDF cells in yellow so they stand out immediately
@@ -490,7 +505,7 @@ def _build_raw_data_sheet(ws, df: pd.DataFrame) -> None:
             # NDF cells: yellow (handled inside _style_data_cell)
             if zero_cost and not is_ndf:
                 c = ws.cell(row_idx, col_idx)
-                c.value          = value
+                _write_cell_value(c, value)
                 c.fill           = PatternFill("solid", fgColor=Colours.ZERO_GREY)
                 c.font           = Font(name="Calibri", color=Colours.GREY_TEXT,
                                         size=10, italic=True)
