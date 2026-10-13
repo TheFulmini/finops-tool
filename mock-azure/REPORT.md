@@ -2,8 +2,9 @@
 
 **Target:** `TheFulmini/finops-tool` (`main → extractor → provider → pricer → exporter`)
 **Method:** offline. Synthetic Azure tenant, no credentials, no network, no real subscription.
-**Date:** 30 September 2026 · **Commit tested:** `f1ac76b` plus the fixes below
-**Suite:** 103 tests in 4 files — **103 passed** (79 functions, 24 of them parametrized)
+**Date:** 30 September 2026; AI-advisor review added 2 October 2026
+**Commit tested:** `main` @ `ef4a6d2` plus the fixes below
+**Suite:** 114 tests in 5 files — **114 passed** (90 functions, 24 of them parametrized)
 
 ## Status of this report
 
@@ -16,6 +17,11 @@ the fixed behaviour:
 | HIGH — CSV formula injection unmitigated | §4.1 | **fixed** — neutralised in `core/spreadsheet_safety.py` |
 | HIGH — the same strings become live Excel formulas in the dashboard | §4.2 | **fixed** — cells forced to a string type |
 | HIGH — nested SQL resources duplicated and mis-attributed | §5.1 | **fixed** — children attributed by ARM id prefix |
+
+One further area was reviewed and is **documented but not fixed**: the AI advisor
+(§4.9). It is dead code that still makes `anthropic` a hard startup dependency, and
+if enabled it sends every subscription name, the top 15 resource names and the spend
+totals to a third-party API with no redaction and no consent step.
 
 Everything else in this report is **still open** and described as observed.
 
@@ -215,12 +221,98 @@ output path (an existing target is overwritten). Expected for a CLI, but relevan
 the path is ever attacker-influenced. *Evidence:* `::test_confirmed_output_path_not_confined`,
 `::test_confirmed_symlink_output_followed`.
 
-### 4.9 What is fine
+### 4.9 MEDIUM — the AI advisor: dead code that hard-depends on an SDK, and an unredacted egress path
+
+`core/ai_advisor.py` was added after the original audit. It is **never called** — every
+call site in `main.py:276-293` is commented out — but it *is* imported at `main.py:36`,
+so `ai_advisor.py:2`'s `import anthropic` runs on every startup.
+
+**(a) Dead code, live dependency.** `anthropic==1.9.0` is declared in `requirements.txt`
+and frozen in `requirements.lock`, so installs work today. But remove the SDK and
+`main.py` will not import at all — the *same failure mode* as the §3 P0 — for code that
+cannot execute. An LLM SDK is now part of the supply chain of every run.
+*Evidence:* `test_ai_advisor.py::test_confirmed_advisor_is_never_called_but_is_a_hard_startup_import`,
+`::test_confirmed_main_cannot_start_without_the_anthropic_sdk`.
+
+**(b) Uncommenting it crashes.** The commented block calls
+`exporter.export_recommendations()` and `exporter.add_recommendations_to_dashboard()` —
+**neither exists** — and reads `args.no_ai`, which no `argparse` flag defines. The docs
+(`QUICK_START_ADVISOR.md`, `IMPLEMENTATION_COMPLETE.md`, `MASTER_IMPLEMENTATION_GUIDE.md`)
+describe a working `--no-ai` advisor flow that the CLI does not implement.
+*Evidence:* `::test_confirmed_commented_wiring_calls_functions_that_do_not_exist`.
+
+**(c) Unredacted data egress.** `_prepare_context()` builds the prompt from real
+identifiers with no redaction, pseudonymisation, dry-run or consent step — the only gate
+is whether `ANTHROPIC_API_KEY` is set:
+
+- **every** subscription name, unbounded (no `[:N]` slice)
+- the top 15 resource names, verbatim
+- total monthly spend, plus per-type and per-subscription spend
+
+For a tool pointed at a production tenant that is customer/project naming plus commercial
+spend leaving the machine to a third-party API. Note the asymmetry with §4.4, where
+tenant identifiers leaking to the *console* was already flagged.
+*Evidence:* `::test_confirmed_all_subscription_names_and_top_resource_names_are_sent`,
+`::test_confirmed_no_consent_or_disclosure_before_data_leaves`.
+
+**(d) Indirect prompt injection.** Resource names are attacker-influenceable — anyone who
+can create a resource in the subscription controls its name — and are interpolated raw
+into the prompt. The model's reply is parsed into "recommendations" carrying
+`implementation_steps` and `action_items` that an operator is meant to act on. `size` is
+truncated to 20 characters; `resource_name` is neither bounded nor sanitised.
+*Evidence:* `::test_confirmed_resource_name_is_an_unfiltered_prompt_injection_channel`.
+
+**(e) Crash on a non-numeric cost.** `total_cost` guards with
+`isinstance(..., (int, float))`; the per-type and per-subscription accumulators do not.
+One string `estimated_cost_usd` — which the pricing pipeline can produce, see §5.4 —
+raises `TypeError` from inside `_prepare_context`, outside any handler.
+*Evidence:* `::test_confirmed_string_cost_crashes_prepare_context`.
+
+**(f) Narrow exception handling.** Only `anthropic.APIError` is caught. Anything else —
+including the `AnthropicError` raised when no key is configured — propagates out of
+`analyze_costs()` and aborts the run *after* pricing has completed. The comment above the
+call promises "timeout and retry safety"; there is no retry. `str(e)` is logged and
+returned to the caller verbatim, the §4.6 pattern again.
+*Evidence:* `::test_confirmed_only_anthropic_apierror_is_caught`,
+`::test_confirmed_error_text_is_echoed_verbatim_to_logs_and_caller`.
+
+**(g) Timestamps mislabelled.** `_get_analysis_date()` formats naive `datetime.now()` and
+appends the literal `"UTC"`.
+*Evidence:* `::test_confirmed_analysis_date_labels_local_time_as_utc`.
+
+**(h) Checked and cleared.** `_extract_json()` calls `json.loads` on every prefix from the
+first `[` to end of response, so it is O(n²) in theory. Measured against the largest
+response the call can produce (`max_tokens=4096`), the worst case is a few hundred
+milliseconds — the C scanner fails fast enough that this is **not** a practical hang.
+Recorded so it is not "fixed" as a non-problem.
+*Evidence:* `::test_guard_extract_json_worst_case_is_bounded_in_practice`.
+
+**Fix:** either wire the advisor properly (add the missing exporter functions and the
+`--no-ai` flag, guard the import so a missing SDK degrades instead of crashing) or delete
+the module and drop `anthropic` from the dependencies. Before enabling it at all: make the
+import lazy, hash or drop subscription and resource names, add a `--redact` mode and a
+dry-run that prints the payload, treat model output as untrusted text rather than
+instructions, and extend the `except` to `anthropic.AnthropicError`.
+
+### 4.10 What is fine
 
 No hardcoded credentials, tokens or connection strings anywhere in the source
 (`::test_guard_no_hardcoded_credentials_in_source`). `DefaultAzureCredential` is used correctly,
 so there is no credential-handling bug — only the SDK import (3.1) breaks auth in
 practice. The `connectionString` in the mock's tags never reaches the output.
+
+Independently confirmed with tooling, not just this suite:
+
+- **Secret scan of tracked files** — no `.env`, no key/certificate/`.pem`/`.pfx`/`.p12`
+  material, no Azure credential cache, no private-key blocks, no GUIDs and no
+  high-entropy blobs in product code. The only keyword hits are `ANTHROPIC_API_KEY`
+  *references* with `sk-ant...` placeholders in docs, and the only long hex strings are
+  the pinned GitHub Action SHAs in `ci.yml` (which is good practice, not a leak).
+- **bandit 1.9.4** over `core/`, `providers/`, `main.py` (1,947 LOC) — **1 low** finding:
+  `B110 try_except_pass` at `providers/azure/resources.py:67`. No medium or high.
+- **pip-audit 2.10.1** against `requirements.lock` (48 pinned packages, OSV) — **no known
+  vulnerabilities**. Caveat: the pins are version-only, not hash-pinned, so a compromised
+  index could still substitute an artifact. Adding `--generate-hashes` closes that.
 
 ---
 
@@ -405,7 +497,7 @@ ignored, so this is no longer a repository-level finding.
 
 ---
 
-## 6. What works (17 guard tests, all passing)
+## 6. What works (35 guard tests, all passing)
 
 - Disabled subscriptions are correctly skipped.
 - Top-level extraction is 1:1 with the source for every top-level type tested.
@@ -423,19 +515,27 @@ ignored, so this is no longer a repository-level finding.
 
 ## 7. Recommended order of work
 
-1. **Fix the SDK import** and pin `azure-mgmt-resource>=26`. Nothing else matters until
-   the tool starts. *(one line)*
-2. **Neutralise formula injection at both sinks** — `exporter.export_csv` and
-   `dashboard.py`. Decide whether `utf-8-sig` is still wanted once that is done.
-3. **Fix nested resource enumeration** — it is producing wrong data and double cost today.
-4. **Make unpriced visible** — count all `$0.00` rows, and distinguish "free" from
+1. ~~**Fix the SDK import** and pin `azure-mgmt-resource`.~~ **Done** on `main` (PR #1).
+   Nothing else mattered until the tool started.
+2. ~~**Neutralise formula injection at both sinks** — `exporter.export_csv` and
+   `dashboard.py`.~~ **Done** — PR #3. Still worth deciding separately whether
+   `utf-8-sig` is wanted.
+3. ~~**Fix nested resource enumeration.**~~ **Done** — PR #4.
+4. **Decide the AI advisor's fate** (§4.9) — wire it properly or delete it. As it stands
+   it is dead code that makes `anthropic` a hard startup dependency, the documented way
+   to enable it calls functions that do not exist, and if it ever ran it would send every
+   subscription name, the top 15 resource names and the spend totals to a third party
+   with no redaction and no consent step.
+5. **Make unpriced visible** — count all `$0.00` rows, and distinguish "free" from
    "unknown" in the CSV.
-5. **Validate prices** — reject negative, non-numeric and missing values; stop caching
+6. **Validate prices** — reject negative, non-numeric and missing values; stop caching
    failures; log a per-run failure count.
-6. **Carry the resource ID and the tags** — without them the output cannot be reconciled
+7. **Carry the resource ID and the tags** — without them the output cannot be reconciled
    or allocated.
-7. Then the reporting layer: metadata columns, dedupe, case-normalised grouping, and a
+8. Then the reporting layer: metadata columns, dedupe, case-normalised grouping, and a
    clear "assumed vs measured" flag on every row.
+9. **Hash-pin the dependencies** (`pip-compile --generate-hashes`) — the lock is
+   version-only today, so a compromised index could substitute an artifact.
 
 ---
 
@@ -451,10 +551,11 @@ cd /opt/data/repos/finops-tool
 .venv-312/bin/python -m pytest mock-azure/ -q
 ```
 
-Files added (all untracked, safe to delete): `mock-azure/generate_mock_azure.py`,
-`offline_harness.py`, `conftest.py`, `test_security.py`, `test_data_quality.py`,
-`test_end_to_end.py`, `test_environment.py`, `README.md`, `REPORT.md` plus the three
-JSON fixtures and one CSV.
+Everything under `mock-azure/` is committed (PR #3, extended by PR #4). The generated
+fixtures are *not* — they are listed in `mock-azure/.gitignore` and rebuilt on demand by
+`conftest.py`: `generate_mock_azure.py`, `offline_harness.py`, `conftest.py`,
+`test_security.py`, `test_data_quality.py`, `test_end_to_end.py`, `test_environment.py`,
+`test_ai_advisor.py`, `README.md`, `REPORT.md`, `.gitignore`.
 
 **Caveat on the fixture:** mock retail prices are region-flat and there is no EA,
 reservation or Spot modelling beyond what the traps exercise. The 21 injection payloads
