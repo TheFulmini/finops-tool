@@ -1,0 +1,7 @@
+# Generated fixtures — reproducible from generate_mock_azure.py (seed 20260930).
+# Regenerate with: python mock-azure/generate_mock_azure.py
+azure_subscriptions.json
+azure_resources_raw.json
+azure_prices.json
+azure_resources_normalized.csv
+resources_extended.yaml

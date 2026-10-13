@@ -181,6 +181,36 @@ def _list_top_level_resources(
 
 # ── Nested resource listing ────────────────────────────────
 
+def _owning_parent(child_id: str, parents: List[Any]):
+    """
+    Return the parent resource that owns `child_id`, or None if none does.
+
+    A child's ARM id embeds its whole ancestry, so the owner is the parent
+    whose id is the longest prefix of the child's:
+
+        parent  .../providers/Microsoft.Sql/servers/sql-prod-ecom
+        child   .../providers/Microsoft.Sql/servers/sql-prod-ecom/databases/maindb
+
+    Longest prefix rather than first match, so a deeper hierarchy still resolves
+    to the closest ancestor. The comparison is case-insensitive, as ARM ids are.
+    """
+    child = (child_id or "").rstrip("/").lower()
+    if not child:
+        return None
+
+    owner = None
+    owner_len = -1
+    for parent in parents:
+        parent_id = (parent.id or "").rstrip("/").lower()
+        if not parent_id:
+            continue
+        # Require a full segment boundary: ".../servers/sql-prod-ecom" must not
+        # match a child of ".../servers/sql-prod-ecom-archive".
+        if child.startswith(parent_id + "/") and len(parent_id) > owner_len:
+            owner, owner_len = parent, len(parent_id)
+    return owner
+
+
 def _list_nested_resources(
     client: ResourceManagementClient,
     subscription_id: str,
@@ -192,11 +222,16 @@ def _list_nested_resources(
 
     For nested types we must:
       1. First list the parent resources (e.g. SQL servers)
-      2. Then for each parent, list its children (e.g. databases)
+      2. Then list the children of each parent (e.g. databases)
 
-    Azure's generic list API does not surface nested resources
-    directly, so we use resources.list_by_resource_group with
-    the parent resource ID as the scope.
+    Azure's generic list API does not surface nested resources directly, and it
+    cannot be scoped to a single parent: a resource-group-scoped query filtered
+    by type returns *every* resource of that type in the group, whichever parent
+    it hangs off. So we ask once per resource group and attribute each child to
+    the parent whose ARM id prefixes the child's id.
+
+    Asking per group rather than per parent is also fewer calls: two SQL servers
+    sharing a resource group cost one child query, not two.
 
     Args:
         client:            ResourceManagementClient for the subscription.
@@ -227,37 +262,52 @@ def _list_nested_resources(
         warn(f"  [WARN] Could not list parent {parent_type}: {e.message}")
         return results
 
-    # Step 2: for each parent, list its children
-    for parent in parents:
-        parent_rg   = _parse_resource_group(parent.id)
-        parent_name = parent.name
+    if not parents:
+        return results
 
+    # Group the parents by resource group so each group is queried exactly once.
+    parents_by_rg: Dict[str, List[Any]] = {}
+    for parent in parents:
+        parent_rg = _parse_resource_group(parent.id)
+        if not parent_rg:
+            warn(f"  [WARN] Skipping {parent.name}: no resource group in its id")
+            continue
+        parents_by_rg.setdefault(parent_rg, []).append(parent)
+
+    # Step 2: per resource group, list the children and attribute each one
+    for parent_rg, rg_parents in parents_by_rg.items():
         try:
-            # The Azure SDK exposes nested resources via list_by_resource_group
-            # with explicit parent_resource_* parameters
-            children = client.resources.list_by_resource_group(
+            children = list(client.resources.list_by_resource_group(
                 resource_group_name=parent_rg,
                 filter=f"resourceType eq '{resource_type}'",
                 expand="createdTime",
-            )
-
-            for child in children:
-                sku_name, sku_tier = _safe_sku(child)
-
-                results.append({
-                    "subscription_id":   subscription_id,
-                    "subscription_name": subscription_name,
-                    "resource_group":    parent_rg,
-                    # Include parent name for clarity, e.g. "myserver/mydb"
-                    "resource_name":     f"{parent_name}/{child.name}",
-                    "resource_type":     resource_type,
-                    "location":          child.location or parent.location or "",
-                    "sku":               sku_name,
-                    "size":              sku_tier,
-                })
-
+            ))
         except HttpResponseError as e:
-            warn(f"  [WARN] Could not list children of {parent_name}: {e.message}")
+            warn(f"  [WARN] Could not list children in {parent_rg}: {e.message}")
+            continue
+
+        for child in children:
+            owner = _owning_parent(child.id, rg_parents)
+            if owner is None:
+                # Never invent an attribution. A child that matches no parent in
+                # this group is reported and dropped, rather than being hung off
+                # whichever parent happened to be iterating.
+                warn(f"  [WARN] Skipping {child.name}: no parent in {parent_rg} owns it")
+                continue
+
+            sku_name, sku_tier = _safe_sku(child)
+
+            results.append({
+                "subscription_id":   subscription_id,
+                "subscription_name": subscription_name,
+                "resource_group":    parent_rg,
+                # The owning parent's name, e.g. "myserver/mydb"
+                "resource_name":     f"{owner.name}/{child.name}",
+                "resource_type":     resource_type,
+                "location":          child.location or owner.location or "",
+                "sku":               sku_name,
+                "size":              sku_tier,
+            })
 
     return results
 
